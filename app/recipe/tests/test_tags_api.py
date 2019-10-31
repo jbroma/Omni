@@ -76,7 +76,7 @@ class PrivateTagsApiTests(TestCase):
             user=self.user
         ).exists()
 
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(new_tags_exist)
 
     def test_create_tag_invalid(self):
