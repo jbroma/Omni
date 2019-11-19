@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,8 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'core',
-    'user',
-    'recipe'
+    'user'
 ]
 
 MIDDLEWARE = [
@@ -94,16 +94,37 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8
+        }
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'user.validators.SpecialCharacterValidator',
+        'OPTIONS': {
+            'count': 1
+        }
+    },
+    {
+        'NAME': 'user.validators.NumberValidator',
+        'OPTIONS': {
+            'count': 1
+        }
+    },
+    {
+        'NAME': 'user.validators.LowercaseValidator',
+        'OPTIONS': {
+            'count': 1
+        }
+    },
+    {
+        'NAME': 'user.validators.UppercaseValidator',
+        'OPTIONS': {
+            'count': 1
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -113,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 
@@ -132,3 +153,9 @@ STATIC_ROOT = '/vol/web/static'
 MEDIA_ROOT = '/vol/web/media'
 
 AUTH_USER_MODEL = 'core.User'
+
+# Email uniqueness is asserted manually within UserManager
+SILENCED_SYSTEM_CHECKS = ['auth.E003', 'auth.W004']
+
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+SECURE_SSL_REDIRECT = False if TESTING else True

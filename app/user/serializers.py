@@ -1,7 +1,42 @@
-from django.contrib.auth import get_user_model, authenticate
+from django.core import exceptions
+from django.contrib.auth import get_user_model, authenticate, \
+    password_validation
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
+
+from core.utils import EmailNotUniqueError
+
+
+def perform_validation(password):
+    """Run the password against validators"""
+    errors = []
+
+    try:
+        password_validation.validate_password(password)
+    except exceptions.ValidationError as e:
+        errors = [*e.messages]
+
+    if errors:
+        raise serializers.ValidationError(errors)
+
+
+def passwords_match(attrs, field_1='password', field_2='confirm_password'):
+    """Check that both password match"""
+    password_1 = attrs.get(field_1, None)
+    password_2 = attrs.get(field_2, None)
+
+    if not password_2:
+        raise serializers.ValidationError(
+            _("Missing confirm password"),
+            code=f'password_missing_{field_2}'
+        )
+
+    if password_1 != password_2:
+        raise serializers.ValidationError(
+            _("Passwords do not match."),
+            code='password_difference'
+        )
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,21 +44,83 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('email', 'password', 'name')
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 6}}
+        fields = (
+            'email', 'name',
+            'phone', 'address', 'zipcode', 'city',
+            'picture'
+        )
+        extra_kwargs = {
+            'email': {'read_only': True},
+            'name': {'read_only': True}
+        }
+
+
+class DeleteUserSerializer(serializers.Serializer):
+    """Serializer for deleting user personal data"""
+    password = serializers.CharField(
+        required=True,
+        style={'input_type': 'password'}
+    )
+    confirm_password = serializers.CharField(
+        required=True,
+        style={'input_type': 'password'}
+    )
+
+    def validate(self, attrs):
+        """Validate that both passwords match before deletion"""
+        passwords_match(attrs)
+
+        user = self.context.get('request').user
+        if not user.check_password(attrs['password']):
+            raise serializers.ValidationError(
+                "Your old password is incorrect",
+                code='password_incorrect'
+            )
+
+        return attrs
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    """Serializer for creating new users"""
+    confirm_password = serializers.CharField(
+        style={'input_type': 'password'},
+        trim_whitespace=False,
+        required=False
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            'email', 'password', 'confirm_password', 'name', 'phone',
+            'address', 'zipcode', 'city', 'picture'
+        )
+        extra_kwargs = {
+            'password': {
+                'write_only': True,
+                'style': {'input_type': 'password'}
+            },
+            'confirm_password': {
+                'write_only': True,
+                'style': {'input_type': 'password'}
+            }
+        }
+
+    def validate(self, attrs):
+        """Validates the password"""
+        passwords_match(attrs)
+        perform_validation(attrs['password'])
+        attrs.pop('confirm_password')
+        return attrs
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it"""
-        return get_user_model().objects.create_user(**validated_data)
-
-    def update(self, instance, validated_data):
-        """Update a user, setting the password correctly and return it"""
-        password = validated_data.pop('password', None)
-        user = super().update(instance, validated_data)
-
-        if password:
-            user.set_password(password)
-            user.save()
+        try:
+            user = get_user_model().objects.create_user(**validated_data)
+        except EmailNotUniqueError as e:
+            raise serializers.ValidationError(
+                _(str(e)),
+                code='email_not_unique'
+            )
 
         return user
 
@@ -52,3 +149,36 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    """Serializer for changing user's password"""
+    old_password = serializers.CharField(
+        required=True, style={'input_type': 'password'}
+    )
+    new_password_1 = serializers.CharField(
+        required=True, style={'input_type': 'password'}
+    )
+    new_password_2 = serializers.CharField(
+        required=True, style={'input_type': 'password'}
+    )
+
+    def validate(self, attrs):
+        """Check if new password meets general password requirements"""
+        user = self.context.get('request').user
+        if not user.check_password(attrs['old_password']):
+            raise serializers.ValidationError(
+                "Your old password is incorrect",
+                code='password_old_incorrect'
+            )
+
+        passwords_match(attrs, 'new_password_1', 'new_password_2')
+        perform_validation(attrs['new_password_1'])
+        return attrs
+
+    def update(self, instance, validated_data):
+        """Update the user's password"""
+        instance.set_password(validated_data['new_password_1'])
+        instance.save()
+
+        return instance

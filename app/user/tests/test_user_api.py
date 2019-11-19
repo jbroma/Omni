@@ -8,7 +8,8 @@ from rest_framework import status
 
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
-ME_URL = reverse('user:me')
+PROFILE_URL = reverse('user:profile')
+PASS_URL = reverse('user:password')
 
 
 def create_user(**kwargs):
@@ -25,30 +26,51 @@ class PublicUserApiTests(TestCase):
         """Test creating user with valid payload is successful"""
         payload = {
             'email': 'test@company.com',
-            'password': 'test123',
+            'password': 'SuperRandomTest1234%',
+            'confirm_password': 'SuperRandomTest1234%',
             'name': 'Doug Kempinsky'
         }
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        res.data.pop('picture')
         user = get_user_model().objects.get(**res.data)
+        # this will fail because UserSerializer cant set passwords.....
         self.assertTrue(user.check_password(payload['password']))
         self.assertNotIn('password', res.data)
+
+    def test_email_required(self):
+        """Test creating user without email should fail"""
+        payload = {
+            'email': '',
+            'password': 'SuperRandomTest1234%',
+            'confirm_password': 'SuperRandomTest1234%',
+            'name': 'Doug Kempinsky'
+        }
+        res = self.client.post(CREATE_USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_user_exists(self):
         """Test creating user that already exists should fail"""
         payload = {
             'email': 'test@company.com',
-            'password': 'examplepassword'
+            'password': 'SuperRandomTest1234%',
+            'confirm_password': 'SuperRandomTest1234%',
+            'name': 'Doug Kempinsky'
         }
-        create_user(**payload)
+        create_user(
+            email='test@company.com',
+            password='SuperRandomTest1234%'
+        )
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_password_too_short(self):
-        """Test that the password must be at least 6 characters long"""
+        """Test that the password must be at least 8 characters long"""
         payload = {
             'email': 'test@company.com',
-            'password': '1234'
+            'password': 'Sxd123$',
+            'confirm_password': 'Sxd123$',
+            'name': 'Doug Kempinsky'
         }
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -100,9 +122,21 @@ class PublicUserApiTests(TestCase):
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_token_user_deactivated(self):
+        """Test that token is not created for inactive user"""
+        user = create_user(email='test@company.com', password='test1234')
+        get_user_model().objects.deactivate(user)
+        payload = {
+            'email': 'test@company.com',
+            'password': 'test1234'
+        }
+        res = self.client.post(TOKEN_URL, payload)
+        self.assertNotIn('token', res.data)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_retrieve_user_unauthorized(self):
         """Test that authentication is required for users"""
-        res = self.client.get(ME_URL)
+        res = self.client.get(PROFILE_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -113,7 +147,7 @@ class PrivateUserApiTests(TestCase):
     def setUp(self):
         self.user = create_user(
             email='test@company.com',
-            password='test1234',
+            password='Pass#215',
             name='Doug Kempinsky'
         )
         self.client = APIClient()
@@ -121,27 +155,103 @@ class PrivateUserApiTests(TestCase):
 
     def test_retrieve_profile_success(self):
         """Test retrieving profile for logged in user"""
-        res = self.client.get(ME_URL)
+        res = self.client.get(PROFILE_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, {
             'name': self.user.name,
-            'email': self.user.email
+            'email': self.user.email,
+            'phone': '',
+            'zipcode': '',
+            'address': '',
+            'city': '',
+            'picture': None
         })
 
     def test_post_me_not_allowed(self):
         """Test that POST request is not allowed on the me url"""
-        res = self.client.post(ME_URL)
+        res = self.client.post(PROFILE_URL)
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_update_user_profile(self):
         """Test that updating the profile for authorized user is successful"""
         payload = {
-            'name': 'Andrew Kempinsky',
-            'password': 'newpass1234'
+            'phone': '+48323532312',
+            'address': 'Baker Street 221B',
+            'city': 'London'
         }
-        res = self.client.patch(ME_URL, payload)
+        res = self.client.patch(PROFILE_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.name, payload['name'])
-        self.assertTrue(self.user.check_password(payload['password']))
+        self.assertEqual(self.user.phone, '+48323532312')
+        self.assertEqual(self.user.address, 'Baker Street 221B')
+        self.assertEqual(self.user.city, 'London')
+
+    def test_update_user_profile_disabled_fields(self):
+        """
+        Test user can't change email, name or password via PROFILE endpoint
+        """
+        payload = {
+            'name': 'Andrew Kempinsky',
+            'password': 'test1234',
+            'address': 'Baker Street 221B',
+            'email': 'other_test@company.com'
+        }
+        res = self.client.patch(PROFILE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.check_password('test1234'))
+        self.assertNotEqual(self.user.name, 'Andrew Kempinsky')
+        self.assertNotEqual(self.user.email, 'other_test@company.com')
+        self.assertEqual(self.user.address, 'Baker Street 221B')
+
+    def test_change_user_password(self):
+        """Test that user can change his password"""
+        payload = {
+            'old_password': 'Pass#215',
+            'new_password_1': 'SuperRandomTest1234%',
+            'new_password_2': 'SuperRandomTest1234%'
+        }
+        res = self.client.patch(PASS_URL, payload)
+
+        self.user.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(self.user.check_password(payload['new_password_1']))
+
+    def test_change_password_old_invalid(self):
+        """Test that old password must match before changing password"""
+        payload = {
+            'old_password': 'wrongoldpassword',
+            'new_password_1': 'SuperRandomTest1234%',
+            'new_password_2': 'SuperRandomTest1234%'
+        }
+        res = self.client.patch(PASS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_change_password_different_new(self):
+        """Test that new password and confirmation are the same"""
+        payload = {
+            'old_password': 'Pass#215',
+            'new_password_1': 'SuperRandomWrong1234%',
+            'new_password_2': 'SuperRandomTest1234%'
+        }
+        res = self.client.patch(PASS_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_user(self):
+        """Test that user can delete his account"""
+        payload = {
+            'password': 'Pass#215',
+            'confirm_password': 'Pass#215'
+        }
+        res = self.client.delete(PROFILE_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_active)
+        self.assertNotEqual(self.user.name, 'Doug Kempinsky')
+        self.assertNotEqual(self.user.email, 'test@company.com')

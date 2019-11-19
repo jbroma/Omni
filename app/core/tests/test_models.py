@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-
-from unittest.mock import patch
+from django.db import connection
 
 from core import models
 
@@ -9,6 +8,41 @@ from core import models
 def sample_user(email='test@company.com', password='test1234'):
     """Create a sample user"""
     return get_user_model().objects.create_user(email, password)
+
+
+def sample_category(name='Nieruchomości'):
+    """Create a sample category"""
+    return models.Category.objects.create(name=name)
+
+
+def sample_ad(user=None, title='Sprzedam Opla',
+              category=None, price=1000.00, content='Nowy Opel na sprzedaz'):
+    """Create a sample advert"""
+    if not user:
+        user = sample_user()
+    if not category:
+        category = sample_category()
+
+    return models.Advert.objects.create(
+        user=user,
+        title=title,
+        category=category,
+        price=price,
+        content=content
+    )
+
+
+def retrieve_msg_content(msg_id):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT content '
+            'FROM core_message '
+            'WHERE id = %s',
+            str(msg_id)
+        )
+        msg_content = cursor.fetchone()[0]
+
+    return msg_content
 
 
 class ModelTests(TestCase):
@@ -45,41 +79,53 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
 
-    def test_tag_str(self):
-        """Test the tag string representation"""
-        tag = models.Tag.objects.create(
-            user=sample_user(),
-            name='Vegan'
+    def test_category_str(self):
+        """Test the category string representation"""
+        category = models.Category.objects.create(
+            name='Elektronika'
         )
 
-        self.assertEqual(str(tag), tag.name)
+        self.assertEqual(str(category), category.name)
 
-    def test_ingredient_str(self):
-        """Test the ingredient string representation"""
-        ingredient = models.Ingredient.objects.create(
-            user=sample_user(),
-            name='Cucumber'
+    # def test_advert_image_str(self):
+    #     """Test the advert image string representation"""
+    #     image = models.AdvertImage.objects.create(
+    #         #TODO
+    #         #Need to create sample image for this to work...
+    #     )
+
+    def test_message_str(self):
+        """Test the message string representation"""
+        user1 = sample_user(email='test1@company.com')
+        user2 = sample_user(email='test2@company.com')
+        advert = sample_ad(user=user1)
+        msg = models.Message.objects.create(
+            sender=user1,
+            recipient=user2,
+            advert=advert,
+            content='abcd'
         )
 
-        self.assertEqual(str(ingredient), ingredient.name)
+        self.assertEqual(str(msg), f'MSG#{msg.pk}')
 
-    def test_recipe_str(self):
-        """Test the recipe string representation"""
-        recipe = models.Recipe.objects.create(
-            user=sample_user(),
-            title='Steak and mushroom sauce',
-            time_minutes=5,
-            price=5.00
+    def test_message_encrypted(self):
+        """Test that message content is stored encrypted in the DB"""
+        msg_content = 'Nie oddam Panu Opla'
+        user1 = sample_user(email='test1@company.com')
+        user2 = sample_user(email='test2@company.com')
+        advert = sample_ad(user=user1)
+        msg = models.Message.objects.create(
+            sender=user1,
+            recipient=user2,
+            advert=advert,
+            content=msg_content
         )
 
-        self.assertEqual(str(recipe), recipe.title)
+        # raw query to extract msg content from a given message
+        msg_encrypted_db = retrieve_msg_content(msg.id)
+        self.assertFalse(isinstance(msg_encrypted_db, str))
+        self.assertNotEqual(msg_encrypted_db.tobytes(), msg.content)
 
-    @patch('uuid.uuid4')
-    def test_recipe_file_name_uuid(self, mock_uuid):
-        """Test that image is saved in the correct location"""
-        uuid = 'test-uuid'
-        mock_uuid.return_value = uuid
-        file_path = models.recipe_image_file_path(None, 'myimage.jpg')
+        msg_decrypted_db = models.Message.objects.get(pk=msg.id)
 
-        exp_path = f'uploads/recipe/{uuid}.jpg'
-        self.assertEqual(file_path, exp_path)
+        self.assertEqual(msg_decrypted_db.content, msg.content)
