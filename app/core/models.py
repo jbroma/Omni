@@ -129,8 +129,8 @@ class Advert(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     content = models.TextField(max_length=10000)
-    date_created = models.DateTimeField(default=timezone.now)
-    date_refreshed = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(default=timezone.now, editable=False)
+    date_refreshed = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
         return f'AD#{self.pk}'
@@ -145,6 +145,26 @@ class AdvertImage(models.Model):
         return os.path.basename(self.image.name)
 
 
+class Conversation(models.Model):
+    """Conversation object"""
+    user_1 = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name='owner'
+    )
+    user_2 = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name='customer'
+    )
+    advert = models.ForeignKey(Advert, on_delete=models.SET_NULL, null=True)
+    title = models.CharField(max_length=100, editable=False)
+    last_updated = models.DateTimeField(default=timezone.now, editable=False)
+
+    def __str__(self):
+        return f'CONVERSATION#{self.pk}'
+
+
 class Message(models.Model):
     """Message object"""
     sender = models.ForeignKey(
@@ -152,14 +172,16 @@ class Message(models.Model):
         on_delete=models.PROTECT,
         related_name='sender'
     )
-    recipient = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name='recipient'
-    )
-    advert = models.ForeignKey(Advert, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(default=timezone.now, editable=False)
     content = encrypt(models.TextField(max_length=10000))
+    conversation = models.ForeignKey(
+        Conversation,
+        on_delete=models.CASCADE,
+        related_name='messages'
+    )
 
     def __str__(self):
         return f'MSG#{self.pk}'
+
+    class Meta:
+        ordering = ['date']
