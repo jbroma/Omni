@@ -76,8 +76,7 @@ class CreateMessageSerializer(serializers.Serializer):
             conversation = Conversation.objects.create(
                 user_1=advert.user,
                 user_2=validated_data.get('sender'),
-                advert=advert,
-                title=advert.title,
+                advert=advert
             )
 
         return Message.objects.create(

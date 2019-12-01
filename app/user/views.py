@@ -55,4 +55,4 @@ class ChangeUserPasswordView(generics.UpdateAPIView):
         )
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)

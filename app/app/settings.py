@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'core',
     'user',
     'message',
@@ -159,5 +160,5 @@ AUTH_USER_MODEL = 'core.User'
 # Email uniqueness is asserted manually within UserManager
 SILENCED_SYSTEM_CHECKS = ['auth.E003', 'auth.W004']
 
-TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-SECURE_SSL_REDIRECT = False if TESTING else True
+# TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+# SECURE_SSL_REDIRECT = False if TESTING else True

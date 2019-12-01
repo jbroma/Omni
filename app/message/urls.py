@@ -6,11 +6,11 @@ from message import views
 
 
 router = DefaultRouter()
-router.register('conversation', views.ConversationViewset)
+router.register('', views.ConversationViewset)
 
 app_name = 'message'
 
 urlpatterns = [
     path('new/', views.CreateMessageView.as_view(), name='new_message'),
-    path('', include(router.urls))
+    *router.urls
 ]

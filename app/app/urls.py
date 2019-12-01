@@ -18,10 +18,13 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from advert.views import CategoryListView, LocationListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', include('user.urls')),
     path('api/message/', include('message.urls')),
-    path('api/advert/', include('advert.urls'))
+    path('api/advert/', include('advert.urls')),
+    path('api/categories/', CategoryListView.as_view(), name='categories'),
+    path('api/locations', LocationListView.as_view(), name='locations'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from core.utils import EmailNotUniqueError
+from core.models import Location
 
 
 def perform_validation(password):
@@ -41,13 +42,16 @@ def passwords_match(attrs, field_1='password', field_2='confirm_password'):
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user objects"""
+    location = serializers.PrimaryKeyRelatedField(
+        required=False,
+        queryset=Location.objects.all()
+    )
 
     class Meta:
         model = get_user_model()
         fields = (
             'email', 'name',
-            'phone', 'address', 'zipcode', 'city',
-            'picture'
+            'phone', 'location', 'picture'
         )
         extra_kwargs = {
             'email': {'read_only': True},
@@ -87,12 +91,16 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         trim_whitespace=False,
         required=False
     )
+    location = serializers.PrimaryKeyRelatedField(
+        required=False,
+        queryset=Location.objects.all()
+    )
 
     class Meta:
         model = get_user_model()
         fields = (
             'email', 'password', 'confirm_password', 'name', 'phone',
-            'address', 'zipcode', 'city', 'picture'
+            'location', 'picture'
         )
         extra_kwargs = {
             'password': {

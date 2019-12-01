@@ -5,6 +5,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
+from core.models import Location
 
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
@@ -161,9 +162,7 @@ class PrivateUserApiTests(TestCase):
             'name': self.user.name,
             'email': self.user.email,
             'phone': '',
-            'zipcode': '',
-            'address': '',
-            'city': '',
+            'location': None,
             'picture': None
         })
 
@@ -174,27 +173,29 @@ class PrivateUserApiTests(TestCase):
 
     def test_update_user_profile(self):
         """Test that updating the profile for authorized user is successful"""
+        location_name = 'Test Location'
+        location = Location.objects.create(name=location_name)
         payload = {
             'phone': '+48323532312',
-            'address': 'Baker Street 221B',
-            'city': 'London'
+            'location': location.id
         }
         res = self.client.patch(PROFILE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
+        
         self.user.refresh_from_db()
         self.assertEqual(self.user.phone, '+48323532312')
-        self.assertEqual(self.user.address, 'Baker Street 221B')
-        self.assertEqual(self.user.city, 'London')
+        self.assertEqual(self.user.location, location)
 
     def test_update_user_profile_disabled_fields(self):
         """
         Test user can't change email, name or password via PROFILE endpoint
         """
+        location_name = 'Test Location'
+        location = Location.objects.create(name=location_name)
         payload = {
             'name': 'Andrew Kempinsky',
             'password': 'test1234',
-            'address': 'Baker Street 221B',
+            'location': location.id,
             'email': 'other_test@company.com'
         }
         res = self.client.patch(PROFILE_URL, payload)
@@ -204,7 +205,7 @@ class PrivateUserApiTests(TestCase):
         self.assertFalse(self.user.check_password('test1234'))
         self.assertNotEqual(self.user.name, 'Andrew Kempinsky')
         self.assertNotEqual(self.user.email, 'other_test@company.com')
-        self.assertEqual(self.user.address, 'Baker Street 221B')
+        self.assertEqual(self.user.location, location)
 
     def test_change_user_password(self):
         """Test that user can change his password"""
@@ -242,7 +243,10 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_user(self):
-        """Test that user can delete his account"""
+        """
+        Test that user can delete his account. Deletion should be equal to
+        account deactivation and removal of personal data associated with it
+        """
         payload = {
             'password': 'Pass#215',
             'confirm_password': 'Pass#215'

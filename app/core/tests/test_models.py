@@ -1,9 +1,13 @@
+import os
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.db import connection
 
 from core import models
-from core.tests.helpers import sample_user, sample_ad, sample_conversation
+from core.tests.helpers import (
+    sample_user, sample_ad, sample_conversation, sample_image
+)
 
 
 def retrieve_msg_content(msg_id):
@@ -53,20 +57,56 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
 
+    def test_location_str(self):
+        """Test the location string representation"""
+        location_name = 'Wrocław'
+        location = models.Location.objects.create(name=location_name)
+
+        self.assertEqual(str(location), location_name)
+
     def test_category_str(self):
         """Test the category string representation"""
-        category = models.Category.objects.create(
-            name='Elektronika'
-        )
+        category_name = 'Elektronika'
+        category = models.Category.objects.create(name=category_name)
 
         self.assertEqual(str(category), category.name)
 
-    # def test_advert_image_str(self):
-    #     """Test the advert image string representation"""
-    #     image = models.AdvertImage.objects.create(
-    #         #TODO
-    #         #Need to create sample image for this to work...
-    #     )
+    def test_advert_image_str(self):
+        """Test the advert image string representation"""
+        image = sample_image()
+
+        self.assertEqual(str(image), os.path.basename(image.image.path))
+
+    def test_advert_image_thumbnail(self):
+        """Test thumbnail is created on creation of an image object"""
+        image = sample_image()
+
+        self.assertIsNotNone(image.thumbnail)
+
+    def test_conversation_str(self):
+        """Test the conversation string representation"""
+        advert = sample_ad(title='Example Title')
+        conversation = sample_conversation(advert.user, ad=advert)
+
+        self.assertEqual(str(conversation), f'CONVERSATION#{conversation.id}')
+
+    def test_conversation_title_created(self):
+        """Test that conversation title is set on creation"""
+        advert = sample_ad(title='Example Title')
+        conversation = sample_conversation(advert.user, ad=advert)
+
+        self.assertEqual(conversation.title, advert.title)
+
+    def test_conversation_title_updated(self):
+        """Test that conversation title is updated after ad title changes"""
+        advert = sample_ad(title='Example Title')
+        conversation = sample_conversation(advert.user, ad=advert)
+
+        advert.title = 'Changed Title'
+        advert.save()
+        conversation.refresh_from_db()
+
+        self.assertEqual(conversation.title, advert.title)
 
     def test_message_str(self):
         """Test the message string representation"""
