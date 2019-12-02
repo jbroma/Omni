@@ -2,8 +2,6 @@ import django_filters as df
 
 from django.db.models import Q
 
-from core.models import Advert
-
 
 class AdvertFilterSet(df.FilterSet):
     """Filters for Advert object"""
