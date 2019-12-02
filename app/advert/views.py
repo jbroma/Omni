@@ -9,6 +9,9 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 )
 
+from django_filters import rest_framework as filters
+
+from advert.filters import AdvertFilterSet
 
 from core.models import Advert, Category, Location, AdvertImage
 
@@ -41,6 +44,8 @@ class AdvertViewset(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticatedOrReadOnly, IsAdvertOwnerOrReadOnly)
     queryset = Advert.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AdvertFilterSet
 
     def get_serializer_class(self):
         """Return appropiate serializer for action"""

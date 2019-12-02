@@ -90,7 +90,7 @@ class AdvertRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advert
         fields = (
-            'id', 'title', 'category', 'price', 'location',
+            'id', 'user', 'title', 'category', 'price', 'location',
             'content', 'date_created', 'date_refreshed', 'images'
         )
         read_only_fields = ('id', 'date_created', 'date_refreshed')
