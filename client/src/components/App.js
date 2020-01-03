@@ -12,15 +12,13 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
-      <main>
-        <Route path="/" exact component={Main} />
-        <Route path="/ad/search" component={AdSearch} />
-        <Route path="/ad/show" component={AdDisplay} />
-        <Route path="/ad/create" component={AdCreate} />
-        <Route path="/ad/edit" component={AdEdit} />
-        <Route path="/user/signup" component={UserSignUp} />
-        <Route path="/user/login" component={UserLogIn} />
-      </main>
+      <Route path="/" exact component={Main} />
+      <Route path="/ad/search" component={AdSearch} />
+      <Route path="/ad/show" component={AdDisplay} />
+      <Route path="/ad/create" component={AdCreate} />
+      <Route path="/ad/edit" component={AdEdit} />
+      <Route path="/user/signup" component={UserSignUp} />
+      <Route path="/user/login" component={UserLogIn} />
       <Footer />
     </BrowserRouter>
   );

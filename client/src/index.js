@@ -7,6 +7,7 @@ import App from "./components/App";
 import reducers from "./reducers";
 
 import "bulma/css/bulma.min.css";
+import "react-image-gallery/styles/css/image-gallery.css";
 import "./style/helpers.css";
 
 const store = createStore(reducers);

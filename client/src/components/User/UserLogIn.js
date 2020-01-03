@@ -41,10 +41,12 @@ class UserLogIn extends React.Component {
                 <hr />
                 <div className="field is-grouped is-grouped-centered">
                   <div className="control">
-                    <button className="button is-medium is-info">Submit</button>
+                    <button className="button is-medium is-primary">
+                      Submit
+                    </button>
                   </div>
                   <div className="control">
-                    <button className="button is-medium is-info is-light">
+                    <button className="button is-medium is-primary is-light">
                       Cancel
                     </button>
                   </div>

@@ -6,13 +6,13 @@ const Footer = () => {
       <div className="container">
         <div className="content has-text-centered">
           <div className="soc">
-            <a href="#" className="icon has-text-info">
+            <a href="#" className="icon has-text-primary">
               <i
                 className="fab fa-facebook-square fa-3x"
                 aria-hidden="true"
               ></i>
             </a>
-            <a href="#" className="icon has-text-info">
+            <a href="#" className="icon has-text-primary">
               <i className="fab fa-twitter-square fa-3x" aria-hidden="true"></i>
             </a>
           </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 const HeroTitle = props => {
   return (
-    <section className="hero is-info is-bold">
+    <section className="hero is-primary">
       <div className="hero-body">
         <div className="container">
           <h1 className="title">{props.title}</h1>

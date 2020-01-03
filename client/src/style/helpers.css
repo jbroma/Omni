@@ -53,6 +53,59 @@ body {
   margin-right: 0.5rem;
 }
 
+.has-text-purple {
+  color: #5800a5 !important;
+}
+
+.has-text-cyan {
+  color: #00deee !important;
+}
+
+.has-text-orange {
+  color: #e46e00 !important;
+}
+
+.react-select__control {
+  box-sizing: border-box;
+  clear: both;
+  font-size: 1.25rem;
+  position: relative;
+  text-align: left;
+}
+
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.ad-display-content {
+  padding-top: 1rem;
+}
+
+.advert-hero-footer {
+  padding-bottom: 0.5rem;
+}
+
+.advert-hero-box {
+  padding: 0.5rem 0;
+  border-radius: 0;
+}
+
+.message-box {
+  margin-bottom: 1rem;
+}
+
+.user-info-icon {
+  margin-right: 0.5rem;
+}
+
+.user-info-para {
+  padding-bottom: 0.5rem;
+}
+
+/* .ad-tags .level-item {
+  margin: 0 0.5rem;
+} */
+
 /* .hero-background {
   background: black url(vintage.jpg) center / cover;
 }

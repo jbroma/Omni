@@ -31,7 +31,7 @@ const Header = () => {
               </p>
               <p className="control">
                 <Link to="/user/signup">
-                  <button className="navbar-item is-tiny button is-info">
+                  <button className="navbar-item is-tiny button is-primary">
                     <strong>Sign Up</strong>
                   </button>
                 </Link>
