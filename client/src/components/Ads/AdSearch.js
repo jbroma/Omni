@@ -21,79 +21,71 @@ const AdvancedSearchBar = () => {
     <div className="columns">
       <div className="column is-full">
         <div className="notification is-white">
-          <div className="columns is-multiline is-centered">
+          <div className="columns is-multiline is-centered is-vcentered">
             <div className="column is-narrow">
-              <div class="field is-horizontal">
-                <div class="field-label is-normal advanced-search-label">
-                  <label class="label ">Category</label>
-                </div>
-                <div class="field-body ">
-                  <div class="field ">
-                    <p class="control has-icons-right is-expanded">
-                      <input
-                        list="categories"
-                        className="input"
-                        type="text"
-                        placeholder="Category"
-                      />
-                      <datalist id="categories">
-                        <option value="Internet Explorer" />
-                        <option value="Firefox" />
-                        <option value="Chrome" />
-                        <option value="Opera" />
-                        <option value="Safari" />
-                      </datalist>
+              <div class="field">
+                <label class="label ">Category</label>
 
-                      <span className="icon is-small is-right">
-                        <i className="fas fa-chevron-down"></i>
-                      </span>
-                    </p>
-                  </div>
-                </div>
+                <p class="control has-icons-right is-expanded">
+                  <input
+                    list="categories"
+                    className="input"
+                    type="text"
+                    placeholder="Category"
+                  />
+                  <datalist id="categories">
+                    <option value="Internet Explorer" />
+                    <option value="Firefox" />
+                    <option value="Chrome" />
+                    <option value="Opera" />
+                    <option value="Safari" />
+                  </datalist>
+                  <span className="icon is-small is-right">
+                    <i className="fas fa-chevron-down"></i>
+                  </span>
+                </p>
               </div>
             </div>
             <div className="column is-narrow">
-              <div class="field is-horizontal">
-                <div class="field-label is-normal advanced-search-label">
-                  <label class="label ">Min. price</label>
-                </div>
-                <div class="field-body">
-                  <div class="field">
-                    <p class="control is-expanded">
-                      <input class="input" type="number" placeholder="0" />
-                    </p>
-                  </div>
-                </div>
+              <div class="field">
+                <label class="label ">Min. price</label>
+                <p class="control is-expanded">
+                  <input class="input" type="number" placeholder="0" />
+                </p>
               </div>
             </div>
             <div className="column is-narrow">
-              <div class="field is-horizontal">
-                <div class="field-label is-normal advanced-search-label">
-                  <label class="label ">Max price</label>
-                </div>
-                <div class="field-body">
-                  <div class="field">
-                    <p class="control is-expanded">
-                      <input class="input" type="number" placeholder="0" />
-                    </p>
-                  </div>
-                </div>
+              <div class="field">
+                <label class="label ">Max price</label>
+                <p class="control is-expanded">
+                  <input class="input" type="number" placeholder="0" />
+                </p>
               </div>
             </div>
             <div className="column is-narrow">
-              <div class="field is-horizontal">
-                <div class="field-label is-normal advanced-search-label">
-                  <label class="label ">Sort by</label>
+              <div class="field">
+                <label class="label ">Sort by</label>
+
+                <div class="select">
+                  <select>
+                    <option>Select dropdown</option>
+                    <option>With options</option>
+                  </select>
                 </div>
-                <div class="field-body">
-                  <div class="field">
-                    <div class="select">
-                      <select>
-                        <option>Select dropdown</option>
-                        <option>With options</option>
-                      </select>
-                    </div>
-                  </div>
+              </div>
+            </div>
+
+            <div className="column">
+              <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                  <button class="button is-primary is-medium has-text-weight-bold">
+                    Filter
+                  </button>
+                </div>
+                <div class="control">
+                  <button class="button is-primary is-light is-medium has-text-weight-bold">
+                    Reset
+                  </button>
                 </div>
               </div>
             </div>
