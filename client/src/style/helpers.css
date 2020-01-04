@@ -102,21 +102,61 @@ input::-webkit-calendar-picker-indicator {
   padding-bottom: 0.5rem;
 }
 
-/* .ad-tags .level-item {
-  margin: 0 0.5rem;
-} */
-
-/* .hero-background {
-  background: black url(vintage.jpg) center / cover;
+.search-title span {
+  padding: 0 1rem !important;
 }
 
-@media (max-width: 1024px) {
-  .hero {
-    background: black url(vintage.jpg) center / cover;
-  }
+.pagination-link.is-current {
+  background-color: hsl(171, 100%, 41%);
+  border-color: white;
 }
-@media (max-width: 768px) {
-  .hero {
-    background: black url(vintage.jpg) center / cover;
-  }
-} */
+
+.search-pagination {
+  margin: 1rem 1px;
+}
+
+.advert-list {
+  border-radius: 0;
+  margin: 0 1px;
+}
+
+.advert-list .list-item {
+  padding-left: 0;
+  padding-right: 0;
+  padding: 0;
+}
+
+.ad-price-tag {
+  padding-left: 0.2rem;
+}
+
+.footer-column {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.ad-image-background {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.ad-date-column {
+  padding-left: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.advanced-search-label {
+  flex-basis: auto !important;
+  flex-grow: 0 !important;
+}
+
+.form-inline .input,
+.form-inline .select {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+}
+.form-inline .label {
+  display: inline-flex;
+}

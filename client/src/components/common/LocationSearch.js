@@ -2,8 +2,8 @@ import React from "react";
 
 const LocationSearch = () => {
   return (
-    <div class="field">
-      <div class="control has-icons-left has-icons-right">
+    <div className="field">
+      <div className="control has-icons-left has-icons-right">
         <input
           list="browsers"
           className="input is-medium"
