@@ -30,30 +30,26 @@ class AdDisplay extends React.Component {
               <div className="field is-grouped is-grouped-multiline">
                 <div className="control">
                   <div className="tags has-addons">
-                    <span className="tag is-dark ">Category:</span>
-                    <span className="tag is-primary is-light">For Kids</span>
+                    <span className="tag is-light ">Category:</span>
+                    <span className="tag is-white">For Kids</span>
                   </div>
                 </div>
                 <div className="control">
                   <div className="tags has-addons">
-                    <span className="tag is-dark">ID:</span>
-                    <span className="tag is-primary is-light">1234512</span>
+                    <span className="tag is-light">ID:</span>
+                    <span className="tag is-white">1234512</span>
                   </div>
                 </div>
                 <div className="control">
                   <div className="tags has-addons">
-                    <span className="tag is-dark ">Created:</span>
-                    <span className="tag is-primary is-light">
-                      25.12.2020 15:26
-                    </span>
+                    <span className="tag is-light ">Created:</span>
+                    <span className="tag is-white">25.12.2020 15:26</span>
                   </div>
                 </div>
                 <div className="control">
                   <div className="tags has-addons">
-                    <span className="tag is-dark ">Edited:</span>
-                    <span className="tag is-primary is-light">
-                      25.12.2020 15:26
-                    </span>
+                    <span className="tag is-light ">Edited:</span>
+                    <span className="tag is-white">25.12.2020 15:26</span>
                   </div>
                 </div>
               </div>
@@ -72,7 +68,10 @@ class AdDisplay extends React.Component {
               />
             </div>
             <div className="column is-two-fifths has-text-justified">
-              <div className="notification is-light has-text-right">
+              <div
+                className="notification is-white has-text-right"
+                style={{ paddingLeft: 2, paddingRight: 2 }}
+              >
                 <div className="box level is-mobile">
                   <div className="level-left icon">
                     <span className="icon has-text-primary level-item">
@@ -141,7 +140,10 @@ class AdDisplay extends React.Component {
           </div>
           <div className="columns">
             <div className="column is-full">
-              <div className="notification is-light">
+              <div
+                className="notification is-white"
+                style={{ paddingLeft: 2, paddingRight: 2 }}
+              >
                 <div className="box">
                   <span className="has-text-justified is-size-5">
                     Skup Samochodow Osobowych Dostawczych Kazde Auto Zadzwon
@@ -189,8 +191,11 @@ class AdDisplay extends React.Component {
               </div>
             </div>
           </div>
-          <div className="notification message-box">
-            <div className="box">
+          <div
+            className="notification is-white message-box"
+            style={{ paddingLeft: 2, paddingRight: 2 }}
+          >
+            <div className="box" style={{ marginBottom: 1 }}>
               <span className="title is-5">Send a message to seller</span>
             </div>
             <div className="box">

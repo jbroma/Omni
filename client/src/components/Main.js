@@ -31,7 +31,7 @@ class Main extends React.Component {
                   <LocationSearch />
                 </div>
                 <div className="column is-narrow">
-                  <button className="button is-primary is-light is-medium is-fullwidth">
+                  <button className="button is-primary is-light is-medium is-fullwidth has-text-weight-bold">
                     Search
                   </button>
                 </div>

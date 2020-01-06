@@ -1,10 +1,11 @@
 import React from "react";
 import HeroTitle from "../common/HeroTitle";
 
-class UserSignUp extends React.Component {
+class UserChangePassword extends React.Component {
   render() {
-    const title = "Sign Up";
-    const subtitle = "Create a new account in under a minute!";
+    const title = "Change password";
+    const subtitle =
+      "Enter your old password along with your new password to change it.";
     return (
       <div>
         <HeroTitle title={title} subtitle={subtitle} />
@@ -13,33 +14,7 @@ class UserSignUp extends React.Component {
             <div className="columns is-vcentered is-centered">
               <div className="box column is-one-third">
                 <div className="field">
-                  <label className="label">Name</label>
-                  <div className="control has-icons-left has-icons-right">
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="Your full name"
-                    />
-                    <span className="icon is-small is-left">
-                      <i className="fas fa-user"></i>
-                    </span>
-                  </div>
-                </div>
-                <div className="field">
-                  <label className="label">Email</label>
-                  <div className="control has-icons-left has-icons-right">
-                    <input
-                      className="input"
-                      type="email"
-                      placeholder="name@provider.com"
-                    />
-                    <span className="icon is-small is-left">
-                      <i className="fas fa-envelope"></i>
-                    </span>
-                  </div>
-                </div>
-                <div className="field">
-                  <label className="label">Password</label>
+                  <label className="label">Current password</label>
                   <p className="control has-icons-left">
                     <input
                       className="input"
@@ -52,7 +27,7 @@ class UserSignUp extends React.Component {
                   </p>
                 </div>
                 <div className="field">
-                  <label className="label">Confirm password</label>
+                  <label className="label">New password</label>
                   <p className="control has-icons-left">
                     <input
                       className="input"
@@ -64,16 +39,28 @@ class UserSignUp extends React.Component {
                     </span>
                   </p>
                 </div>
-
+                <div className="field">
+                  <label className="label">Confirm new password</label>
+                  <p className="control has-icons-left">
+                    <input
+                      className="input"
+                      type="password"
+                      placeholder="Password"
+                    />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  </p>
+                </div>
                 <hr />
                 <div className="field is-grouped is-grouped-centered">
                   <div className="control">
                     <button className="button is-medium is-primary has-text-weight-bold">
-                      Sign Up
+                      Submit
                     </button>
                   </div>
                   <div className="control">
-                    <button className="button is-medium  is-light has-text-weight-bold">
+                    <button className="button is-medium is-light has-text-weight-bold">
                       Cancel
                     </button>
                   </div>
@@ -87,4 +74,4 @@ class UserSignUp extends React.Component {
   }
 }
 
-export default UserSignUp;
+export default UserChangePassword;

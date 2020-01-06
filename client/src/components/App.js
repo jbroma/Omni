@@ -6,7 +6,15 @@ import Footer from "./Footer";
 import Main from "./Main";
 
 import { AdCreate, AdEdit, AdDisplay, AdSearch } from "./Ads/Ads";
-import { UserSignUp, UserLogIn } from "./User/User";
+import {
+  UserSignUp,
+  UserLogIn,
+  UserProfile,
+  UserChangePassword,
+  UserDelete,
+  UserEdit
+} from "./User/User";
+import Conversation from "./Conversation/Conversation";
 
 const App = () => {
   return (
@@ -19,6 +27,12 @@ const App = () => {
       <Route path="/ad/edit" component={AdEdit} />
       <Route path="/user/signup" component={UserSignUp} />
       <Route path="/user/login" component={UserLogIn} />
+      <Route path="/user/profile" exact component={UserProfile} />
+      <Route path="/user/edit" exact component={UserEdit} />
+      <Route path="/user/pass" exact component={UserChangePassword} />
+      <Route path="/user/delete" exact component={UserDelete} />
+      <Route path="/conversation" component={Conversation} />
+
       <Footer />
     </BrowserRouter>
   );

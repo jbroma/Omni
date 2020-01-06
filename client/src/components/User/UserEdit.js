@@ -1,10 +1,10 @@
 import React from "react";
 import HeroTitle from "../common/HeroTitle";
 
-class UserLogIn extends React.Component {
+class UserEdit extends React.Component {
   render() {
-    const title = "Log In";
-    const subtitle = "Authenticate to proceed further";
+    const title = "Edit Profile Info";
+    const subtitle = "Change your location or telephone number";
     return (
       <div>
         <HeroTitle title={title} subtitle={subtitle} />
@@ -13,28 +13,39 @@ class UserLogIn extends React.Component {
             <div className="columns is-vcentered is-centered">
               <div className="box column is-one-third">
                 <div className="field">
-                  <label className="label">Email</label>
+                  <label className="label">Location</label>
                   <div className="control has-icons-left has-icons-right">
                     <input
+                      list="locations"
                       className="input"
-                      type="email"
-                      placeholder="name@provider.com"
+                      type="text"
+                      placeholder="Location"
                     />
+                    <datalist id="location">
+                      <option value="Internet Explorer" />
+                      <option value="Firefox" />
+                      <option value="Chrome" />
+                      <option value="Opera" />
+                      <option value="Safari" />
+                    </datalist>
                     <span className="icon is-small is-left">
-                      <i className="fas fa-envelope"></i>
+                      <i className="fas fa-globe"></i>
+                    </span>
+                    <span className="icon is-small is-right">
+                      <i className="fas fa-chevron-down"></i>
                     </span>
                   </div>
                 </div>
                 <div className="field">
-                  <label className="label">Password</label>
+                  <label className="label">Telephone number</label>
                   <p className="control has-icons-left">
                     <input
                       className="input"
-                      type="password"
-                      placeholder="Password"
+                      type="text"
+                      placeholder="123 456 789"
                     />
                     <span className="icon is-small is-left">
-                      <i className="fas fa-lock"></i>
+                      <i className="fas fa-phone"></i>
                     </span>
                   </p>
                 </div>
@@ -42,7 +53,7 @@ class UserLogIn extends React.Component {
                 <div className="field is-grouped is-grouped-centered">
                   <div className="control">
                     <button className="button is-medium is-primary has-text-weight-bold">
-                      Log In
+                      Change
                     </button>
                   </div>
                   <div className="control">
@@ -60,4 +71,4 @@ class UserLogIn extends React.Component {
   }
 }
 
-export default UserLogIn;
+export default UserEdit;

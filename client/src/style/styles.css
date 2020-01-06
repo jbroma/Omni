@@ -160,3 +160,43 @@ input::-webkit-calendar-picker-indicator {
 .form-inline .label {
   display: inline-flex;
 }
+
+.image-upload-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.profile-info {
+  margin: 0.1rem 0;
+}
+
+.hero-body-padding {
+  padding: 1.5rem 1rem;
+}
+
+.tabs li.is-active a {
+  border-bottom-color: hsl(171, 100%, 41%);
+  color: hsl(171, 100%, 41%);
+}
+
+.card-footer-item {
+  padding-bottom: 0.1rem;
+  padding-top: 0.1rem;
+}
+
+.active-advert-view {
+  background-color: #ebfffc;
+  color: #00947e;
+}
+
+.active-advert-edit {
+  background-color: whitesmoke;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.active-advert-delete {
+  background-color: #feecf0;
+  color: #cc0f35;
+}

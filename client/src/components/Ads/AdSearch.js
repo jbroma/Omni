@@ -16,6 +16,42 @@ const SearchTitle = props => {
   return <HeroTitle title={title} subtitle={subtitle} />;
 };
 
+const MainSearchBar = () => {
+  return (
+    <div className="columns is-centered">
+      <div className="column is-full">
+        <div className="notification">
+          <div className="columns is-centered">
+            <div className="column is-three-fifths">
+              <div className="field">
+                <div className="control has-icons-left">
+                  <input
+                    className="input is-medium"
+                    type="text"
+                    placeholder="E.g. Golden Retriever puppies"
+                  />
+                  <span className="icon is-small is-left">
+                    <i className="fas fa-search fa-lg"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="column">
+              <LocationSearch />
+            </div>
+            <div className="column is-narrow">
+              <button className="button is-primary is-light is-medium is-fullwidth has-text-weight-bold">
+                Search
+              </button>
+            </div>
+          </div>
+          <AdvancedSearch />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AdvancedSearchBar = () => {
   return (
     <div className="columns">
@@ -216,37 +252,7 @@ class AdSearch extends React.Component {
       <div>
         <SearchTitle query={"Wiedźmin 3 Xbox One nowy"} />
         <section className="container is-clipped">
-          <div className="columns is-centered">
-            <div className="column is-full">
-              <div className="notification">
-                <div className="columns is-centered">
-                  <div className="column is-three-fifths">
-                    <div className="field">
-                      <div className="control has-icons-left">
-                        <input
-                          className="input is-medium"
-                          type="text"
-                          placeholder="E.g. Golden Retriever puppies"
-                        />
-                        <span className="icon is-small is-left">
-                          <i className="fas fa-search fa-lg"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="column">
-                    <LocationSearch />
-                  </div>
-                  <div className="column is-narrow">
-                    <button className="button is-primary is-light is-medium is-fullwidth">
-                      Search
-                    </button>
-                  </div>
-                </div>
-                <AdvancedSearch />
-              </div>
-            </div>
-          </div>
+          <MainSearchBar />
           <div className="columns is-centered">
             <div className="column is-full">
               <AdvertList />
