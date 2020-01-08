@@ -171,10 +171,10 @@ const Conversation = () => {
         <div className="media-content is-clipped">
           <div className="columns is-mobile">
             <div className="column">
-              <p className="has-text-weight-bold">Wiedźmin 3 Xbox One Nowy</p>
-              <small className>
+              <p className="title is-size-6">Wiedźmin 3 Xbox One Nowy</p>
+              <p className="subtitle is-size-6" stlyle={{ marginTop: "-1rem" }}>
                 from <strong>Jakub Romańczyk</strong>
-              </small>
+              </p>
             </div>
             <div className="column is-narrow" style={{ paddingLeft: 0 }}>
               <p>
