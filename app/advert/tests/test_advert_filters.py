@@ -91,7 +91,7 @@ class AdvertCategoryFilterTests(TestCase):
         res = self.client.get(search_url)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data[0]['category'], category_id)
+        self.assertEqual(res.data[0]['category']['id'], category_id)
 
     def test_filter_category_children(self):
         """Test filtering ads by category should include child categories"""
@@ -198,7 +198,7 @@ class AdvertLocationFilterTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
-        self.assertEqual(int(res.data[0]['location']), location_id)
+        self.assertEqual(int(res.data[0]['location']['id']), location_id)
 
     def test_filter_location_inexact_match(self):
         """Test filtering ads by location, providing only part of a location"""

@@ -181,7 +181,7 @@ class PrivateUserApiTests(TestCase):
         }
         res = self.client.patch(PROFILE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        
+
         self.user.refresh_from_db()
         self.assertEqual(self.user.phone, '+48323532312')
         self.assertEqual(self.user.location, location)

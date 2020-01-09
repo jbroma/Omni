@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from rest_framework import generics, viewsets, mixins, status
+from rest_framework import generics, viewsets, mixins, status, views
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
@@ -19,7 +19,7 @@ from advert.permissions import (
     IsAdvertOwnerOrReadOnly, IsAdvertImageOwnerOrReadOnly
 )
 from advert.serializers import (
-    CategoryListSerializer, LocationListSerializer,
+    CategorySerializer, LocationSerializer,
     AdvertListSerializer, AdvertRetrieveSerializer,
     AdvertCreateUpdateSerializer, AdvertImageSerializer
 )
@@ -27,16 +27,33 @@ from advert.serializers import (
 
 class CategoryListView(generics.ListAPIView):
     """View for listing all categories"""
-    serializer_class = CategoryListSerializer
+    serializer_class = CategorySerializer
     permission_classes = (AllowAny,)
     queryset = Category.objects.filter(parent=None)
 
 
 class LocationListView(generics.ListAPIView):
     """View for listing all locations"""
-    serializer_class = LocationListSerializer
+    serializer_class = LocationSerializer
     permission_classes = (AllowAny,)
     queryset = Location.objects.all()
+
+
+class AdvertOwnerView(views.APIView):
+    """View for checking ownership of an Advert"""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, pk):
+        qs = Advert.objects.all()
+        return get_object_or_404(qs, pk=pk)
+
+    def get(self, request, pk, format=None):
+        advert = self.get_object(pk)
+        if self.request.user == advert.user:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class AdvertViewset(viewsets.ModelViewSet):

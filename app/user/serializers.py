@@ -40,6 +40,16 @@ def passwords_match(attrs, field_1='password', field_2='confirm_password'):
         )
 
 
+class PublicUserSerializer(serializers.ModelSerializer):
+    """Serializer for nesting public user data"""
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            'id', 'name', 'picture'
+        )
+
+
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user objects"""
     location = serializers.PrimaryKeyRelatedField(

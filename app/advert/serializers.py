@@ -5,8 +5,10 @@ from core.models import (
     Category, Location, Advert, AdvertImage, AdvertImageLink
 )
 
+from user.serializers import PublicUserSerializer
 
-class CategoryListSerializer(serializers.ModelSerializer):
+
+class CategorySerializer(serializers.ModelSerializer):
     """Serializer for listing categories"""
     subcategories = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
@@ -17,7 +19,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     def get_subcategories(self, obj):
         subcategories = Category.objects.filter(parent=obj)
-        return CategoryListSerializer(
+        return CategorySerializer(
             subcategories, many=True, context=self.context
         ).data
 
@@ -28,7 +30,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
         return f"{view_url}?category__id={obj.id}/"
 
 
-class LocationListSerializer(serializers.ModelSerializer):
+class LocationSerializer(serializers.ModelSerializer):
     """Serializer for listing locations"""
     url = serializers.SerializerMethodField()
 
@@ -57,8 +59,8 @@ class AdvertImageSerializer(serializers.ModelSerializer):
 
 class AdvertListSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for listing adverts"""
-    category = serializers.PrimaryKeyRelatedField(read_only=True)
-    location = serializers.PrimaryKeyRelatedField(read_only=True)
+    category = CategorySerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
     thumbnail = serializers.SerializerMethodField()
 
     class Meta:
@@ -86,6 +88,9 @@ class AdvertListSerializer(serializers.HyperlinkedModelSerializer):
 class AdvertRetrieveSerializer(serializers.ModelSerializer):
     """Serializer for single Advert instance"""
     images = serializers.SerializerMethodField()
+    user = PublicUserSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
 
     class Meta:
         model = Advert

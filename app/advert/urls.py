@@ -1,6 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 
 from rest_framework.routers import DefaultRouter
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from advert import views
 
@@ -12,4 +13,14 @@ router.register('', views.AdvertViewset)
 
 app_name = 'advert'
 
-urlpatterns = router.urls
+owner_pattern = [
+    path(
+        'advert/owner/<int:pk>/',
+        views.AdvertOwnerView.as_view(),
+        name='owner'
+    )
+]
+
+owner_pattern = format_suffix_patterns(owner_pattern)
+
+urlpatterns = [*owner_pattern, *router.urls]

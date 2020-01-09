@@ -22,6 +22,8 @@ from advert.serializers import (
     AdvertRetrieveSerializer, AdvertCreateUpdateSerializer
 )
 
+# Fix for using serializer without request params
+BASE_TEST_URL = 'http://testserver'
 
 ADVERTS_URL = reverse('advert:advert-list')
 OWNED_ADVERTS_URL = reverse('advert:advert-owned')
@@ -34,6 +36,10 @@ def advert_detail_url(advert_id):
 
 def advert_refresh_url(advert_id):
     return reverse('advert:advert-refresh', args=[advert_id])
+
+
+def advert_owner_url(advert_id):
+    return reverse('advert:owner', args=[advert_id])
 
 
 def upload_valid_test_image(client):
@@ -110,6 +116,11 @@ class PublicAdvertApiTests(TestCase):
         advert = sample_ad()
         res = self.client.get(advert_detail_url(advert.id))
         serializer = AdvertRetrieveSerializer(advert)
+
+        cat_fix = f"{BASE_TEST_URL}{serializer.data['category']['url']}"
+        loc_fix = f"{BASE_TEST_URL}{serializer.data['location']['url']}"
+        serializer.data['category']['url'] = cat_fix
+        serializer.data['location']['url'] = loc_fix
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -380,5 +391,22 @@ class PrivateAdvertApiTests(TestCase):
         advert = sample_ad(user=self.user)
 
         res = self.client.patch(advert_refresh_url(advert.id))
+
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_check_advert_ownership(self):
+        """Test that advert belongs to the authenticated user"""
+        advert = sample_ad(user=self.user)
+
+        res = self.client.head(advert_owner_url(advert.id))
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_check_advert_ownership_fails(self):
+        """Test that advert doesn't belong to the authenticated user"""
+        user_2 = sample_user()
+        advert = sample_ad(user=user_2)
+
+        res = self.client.head(advert_owner_url(advert.id))
 
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
