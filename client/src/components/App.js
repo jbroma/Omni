@@ -1,9 +1,11 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
 
+import { Router, Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
+import history from "../history";
 
 import { AdCreate, AdEdit, AdDisplay, AdSearch } from "./Ads/Ads";
 import {
@@ -18,23 +20,28 @@ import Conversation from "./Conversation/Conversation";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <Router history={history}>
       <Header />
-      <Route path="/" exact component={Main} />
-      <Route path="/ad/search" component={AdSearch} />
-      <Route path="/ad/show" component={AdDisplay} />
-      <Route path="/ad/create" component={AdCreate} />
-      <Route path="/ad/edit" component={AdEdit} />
-      <Route path="/user/signup" component={UserSignUp} />
-      <Route path="/user/login" component={UserLogIn} />
-      <Route path="/user/profile" exact component={UserProfile} />
-      <Route path="/user/edit" exact component={UserEdit} />
-      <Route path="/user/pass" exact component={UserChangePassword} />
-      <Route path="/user/delete" exact component={UserDelete} />
-      <Route path="/conversation" component={Conversation} />
-
+      <Switch>
+        <Route path="/" exact component={Main} />
+        <Route path="/ad/search/:query" component={AdSearch} />
+        <Route path="/ad/show/:id" component={AdDisplay} />
+        <ProtectedRoute path="/ad/create" exact component={AdCreate} />
+        <ProtectedRoute path="/ad/edit/:id" component={AdEdit} />
+        <Route path="/user/signup" exact component={UserSignUp} />
+        <Route path="/user/login" exact component={UserLogIn} />
+        <ProtectedRoute path="/user/profile" exact component={UserProfile} />
+        <ProtectedRoute path="/user/edit" exact component={UserEdit} />
+        <ProtectedRoute
+          path="/user/pass"
+          exact
+          component={UserChangePassword}
+        />
+        <ProtectedRoute path="/user/delete" exact component={UserDelete} />
+        <ProtectedRoute path="/conversation/:id" component={Conversation} />
+      </Switch>
       <Footer />
-    </BrowserRouter>
+    </Router>
   );
 };
 

@@ -200,3 +200,9 @@ input::-webkit-calendar-picker-indicator {
   background-color: #feecf0;
   color: #cc0f35;
 }
+
+.fit-image {
+  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+}

@@ -1,11 +1,183 @@
-export const SignIn = () => {
-  return {
-    type: "SIGN_IN"
-  };
+import server from "../apis/server";
+import history from "../history";
+
+import {
+  LOG_IN,
+  LOG_IN_FAILED,
+  SIGN_UP,
+  SIGN_UP_FAILED,
+  LOCALSTORAGE_LOG_IN,
+  LOCALSTORAGE_LOG_IN_FAILED,
+  LOG_OUT,
+  GET_USER_PROFILE,
+  UPLOAD_PROFILE_PICTURE,
+  GET_USER_ADVERTS,
+  GET_USER_CONVERSATIONS,
+  EDIT_USER_PROFILE,
+  EDIT_USER_PROFILE_FAILED,
+  DELETE_USER,
+  DELETE_USER_FAILED,
+  CHANGE_PASSWORD,
+  CHANGE_PASSWORD_FAILED
+} from "./types";
+
+export const LogIn = formValues => async dispatch => {
+  try {
+    const response = await server.post("/user/token/", formValues);
+    server.defaults.headers.common[
+      "Authorization"
+    ] = `Token ${response.data.token}`;
+    dispatch({
+      type: LOG_IN,
+      payload: response.data
+    });
+    window.localStorage.setItem("token", response.data.token);
+    window.localStorage.setItem("user_id", response.data.user_id);
+    history.push("/user/profile");
+  } catch (err) {
+    dispatch({
+      type: LOG_IN_FAILED,
+      payload: err.response.data
+    });
+  }
 };
 
-export const SignOut = () => {
-  return {
-    type: "SIGN_OUT"
-  };
+export const SignUp = formValues => async dispatch => {
+  try {
+    const response = await server.post("/user/create/", formValues);
+    dispatch({
+      type: SIGN_UP,
+      payload: response.data
+    });
+    history.push("/user/login");
+  } catch (err) {
+    dispatch({
+      type: SIGN_UP_FAILED,
+      payload: err.response.data
+    });
+  }
+};
+
+export const LocalStorageLogIn = () => async dispatch => {
+  try {
+    const token = window.localStorage.getItem("token");
+    const user_id = window.localStorage.getItem("user_id");
+    if (token && user_id) {
+      const response = await server.get("/user/profile/", {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+      if (response.data.id == user_id) {
+        server.defaults.headers.common["Authorization"] = `Token ${token}`;
+        dispatch({
+          type: LOCALSTORAGE_LOG_IN,
+          payload: { token, user_id }
+        });
+      } else throw new Error("Wrong userId in LS");
+    } else throw new Error("Missing data in LS");
+  } catch (err) {
+    dispatch({
+      type: LOCALSTORAGE_LOG_IN_FAILED
+    });
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("user_id");
+  }
+};
+
+export const LogOut = () => async dispatch => {
+  window.localStorage.removeItem("token");
+  window.localStorage.removeItem("user_id");
+  delete server.defaults.headers.common["Authorization"];
+  dispatch({
+    type: LOG_OUT
+  });
+  history.push("/");
+};
+
+export const GetUserProfile = () => async dispatch => {
+  const response = await server.get("/user/profile/");
+  dispatch({
+    type: GET_USER_PROFILE,
+    payload: response.data
+  });
+};
+
+export const UploadProfilePicture = formValues => async dispatch => {
+  const formData = new FormData();
+  formData.append("picture", formValues.picture);
+  const response = await server.patch("/user/profile/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
+  dispatch({
+    type: UPLOAD_PROFILE_PICTURE,
+    payload: response.data
+  });
+};
+
+export const GetUserAdverts = userId => async dispatch => {
+  const response = await server.get(`/advert/?user=${userId}`);
+  dispatch({
+    type: GET_USER_ADVERTS,
+    payload: response.data
+  });
+};
+
+export const GetUserConversations = () => async dispatch => {
+  const response = await server.get("/message/");
+  dispatch({
+    type: GET_USER_CONVERSATIONS,
+    payload: response.data
+  });
+};
+
+export const EditUserProfile = formValues => async dispatch => {
+  try {
+    const response = await server.patch("/user/profile/", formValues);
+    dispatch({
+      type: EDIT_USER_PROFILE,
+      payload: response.data
+    });
+    history.push("/user/profile");
+  } catch (err) {
+    dispatch({
+      type: EDIT_USER_PROFILE_FAILED,
+      payload: err.response.data
+    });
+  }
+};
+
+export const DeleteUser = formValues => async dispatch => {
+  try {
+    await server.delete("/user/profile/", formValues);
+    dispatch({
+      type: DELETE_USER
+    });
+    dispatch({
+      type: LOG_OUT
+    });
+    history.push("/");
+  } catch (err) {
+    dispatch({
+      type: DELETE_USER_FAILED,
+      payload: err.response.data
+    });
+  }
+};
+
+export const ChangePassword = formValues => async dispatch => {
+  try {
+    await server.put("/user/pass/", formValues);
+    dispatch({
+      type: CHANGE_PASSWORD
+    });
+    history.push("/user/profile");
+  } catch (err) {
+    dispatch({
+      type: CHANGE_PASSWORD_FAILED,
+      payload: err.response.data
+    });
+  }
 };

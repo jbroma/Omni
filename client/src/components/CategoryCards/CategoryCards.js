@@ -62,7 +62,12 @@ const CategoryCards = () => {
   return (
     <div className="columns is-multiline">
       {Categories.map(category => {
-        return <Card {...category} />;
+        return (
+          <Card
+            {...category}
+            key={category.name.replace(/ /g, "_").toLowerCase()}
+          />
+        );
       })}
     </div>
   );
