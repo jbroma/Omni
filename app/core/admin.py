@@ -27,7 +27,9 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Category)
+admin.site.register(models.Location)
 admin.site.register(models.Advert)
 admin.site.register(models.AdvertImage)
+admin.site.register(models.AdvertImageLink)
 admin.site.register(models.Conversation)
 admin.site.register(models.Message)

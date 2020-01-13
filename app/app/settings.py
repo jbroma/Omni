@@ -26,7 +26,7 @@ SECRET_KEY = '4#e6%6b3owcf+y@48ys4r3l!!^r6m*wq+b*f4wlo%n*z5p8u1%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'django_filters',
     'core',
     'user',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -160,5 +162,7 @@ AUTH_USER_MODEL = 'core.User'
 # Email uniqueness is asserted manually within UserManager
 SILENCED_SYSTEM_CHECKS = ['auth.E003', 'auth.W004']
 
+# CORS - for development purposes, set to true for all origins.
+CORS_ORIGIN_ALLOW_ALL = True
 # TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # SECURE_SSL_REDIRECT = False if TESTING else True

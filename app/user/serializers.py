@@ -16,7 +16,7 @@ def perform_validation(password):
     try:
         password_validation.validate_password(password)
     except exceptions.ValidationError as e:
-        errors = [*e.messages]
+        errors = e.error_list
 
     if errors:
         raise serializers.ValidationError(errors)
@@ -40,6 +40,14 @@ def passwords_match(attrs, field_1='password', field_2='confirm_password'):
         )
 
 
+def check_email_in_use(email):
+    qs = get_user_model().objects.filter(email=email)
+    if(qs):
+        raise serializers.ValidationError(
+            _("This e-mail is already in use by another user"),
+            code='email_in_use'
+        )
+
 class PublicUserSerializer(serializers.ModelSerializer):
     """Serializer for nesting public user data"""
 
@@ -56,14 +64,18 @@ class UserSerializer(serializers.ModelSerializer):
         required=False,
         queryset=Location.objects.all()
     )
+    picture = serializers.ImageField(
+        max_length=None, use_url=True
+    )
 
     class Meta:
         model = get_user_model()
         fields = (
-            'email', 'name',
+            'id', 'email', 'name',
             'phone', 'location', 'picture'
         )
         extra_kwargs = {
+            'id': {'read_only': True},
             'email': {'read_only': True},
             'name': {'read_only': True}
         }
@@ -127,6 +139,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         """Validates the password"""
         passwords_match(attrs)
         perform_validation(attrs['password'])
+        check_email_in_use(attrs['email'])
         attrs.pop('confirm_password')
         return attrs
 
