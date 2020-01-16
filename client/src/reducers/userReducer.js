@@ -10,7 +10,8 @@ import {
   DELETE_USER_FAILED,
   CHANGE_PASSWORD,
   CHANGE_PASSWORD_FAILED,
-  LOG_OUT
+  LOG_OUT,
+  DELETE_ADVERT
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -20,9 +21,14 @@ export default (state = {}, action) => {
     case UPLOAD_PROFILE_PICTURE:
       return { ...state, ...action.payload };
     case GET_USER_ADVERTS:
-      return { ...state, adverts: { ...action.payload } };
+      return { ...state, adverts: { ..._.mapKeys(action.payload, "id") } };
+    case DELETE_ADVERT:
+      return { ...state, adverts: _.omit(state.adverts, action.payload) };
     case GET_USER_CONVERSATIONS:
-      return { ...state, conversations: { ...action.payload } };
+      return {
+        ...state,
+        conversations: { ..._.mapKeys(action.payload, "id") }
+      };
     case EDIT_USER_PROFILE:
       return { ..._.omit(state, "edit_errors"), ...action.payload };
     case EDIT_USER_PROFILE_FAILED:

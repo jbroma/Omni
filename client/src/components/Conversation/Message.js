@@ -1,10 +1,14 @@
 import React from "react";
+import Moment from "react-moment";
 
 const UserPicture = props => {
   return (
     <figure className={`${props.currentUser ? "media-right" : "media-left"}`}>
       <p className="image is-64x64">
-        <img src={props.userPic} />
+        <img
+          src={props.userPic ? props.userPic : "/avatar128.png"}
+          className="fit-image"
+        />
       </p>
     </figure>
   );
@@ -13,15 +17,15 @@ const UserPicture = props => {
 class Message extends React.Component {
   render() {
     return (
-      <article class="media">
+      <article className="media">
         {this.props.currentUser ? null : (
           <UserPicture
             currentUser={this.props.currentUser}
-            userPic={"https://bulma.io/images/placeholders/128x128.png"}
+            userPic={this.props.userPic}
           />
         )}
         <div
-          class={`media-content notification ${
+          className={`media-content notification ${
             this.props.currentUser ? "is-primary" : "is-light"
           } is-marginless`}
           style={{ padding: "0.5rem 1rem" }}
@@ -33,20 +37,24 @@ class Message extends React.Component {
           >
             <p className="is-marginless">
               {this.props.currentUser ? (
-                <small>{`${this.props.date} `}</small>
+                <Moment fromNow component="small">
+                  {this.props.date}
+                </Moment>
               ) : null}
-              <strong>{`${this.props.user}`}</strong>
+              <strong>{` ${this.props.user} `}</strong>
               {this.props.currentUser ? null : (
-                <small>{` ${this.props.date}`}</small>
+                <Moment fromNow component="small">
+                  {this.props.date}
+                </Moment>
               )}
             </p>
-            <p>{this.props.content}</p>
+            <p style={{ whiteSpace: "pre" }}>{this.props.content}</p>
           </div>
         </div>
         {this.props.currentUser ? (
           <UserPicture
             currentUser={this.props.currentUser}
-            userPic={"https://bulma.io/images/placeholders/128x128.png"}
+            userPic={this.props.userPic}
           />
         ) : null}
       </article>

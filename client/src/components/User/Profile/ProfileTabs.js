@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { GetUserAdverts, GetUserConversations } from "../../../actions";
 import Loading from "../../Loading";
 import ActiveAdvert from "./ActiveAdvert";
@@ -33,7 +32,13 @@ class ProfileTabs extends React.Component {
   }
 
   renderActiveConversations(conversations) {
-    console.log(conversations);
+    if (!conversations || _.isEmpty(conversations)) {
+      return <NoActiveObjects name="conversations" />;
+    } else {
+      return Object.values(conversations).map(conv => (
+        <ActiveConversation key={conv.id} conversation={conv} />
+      ));
+    }
   }
 
   renderTab() {
@@ -42,12 +47,6 @@ class ProfileTabs extends React.Component {
       case 0:
         return this.renderActiveAdverts(adverts);
       case 1:
-        // return (
-        //   <div>
-        //     <ActiveConversation />
-        //     <ActiveConversation />
-        //   </div>
-        // );
         return this.renderActiveConversations(conversations);
       case 2:
         return <ProfileSettings />;

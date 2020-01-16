@@ -1,19 +1,18 @@
 import React from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { DeleteAdvert } from "../../../actions";
 
 const ActiveAdvert = props => {
-  const {
-    id,
-    title,
-    category,
-    location,
-    date_refreshed,
-    thumbnail
-  } = props.advert;
+  const { DeleteAdvert } = props;
+  const { id, title, category, date_refreshed, thumbnail } = props.advert;
   const editDate = new Date(date_refreshed);
   return (
-    <div className="card-content" style={{ padding: "1rem 0.5rem" }}>
+    <div
+      className="card-content active-advert"
+      style={{ padding: "1rem 0.5rem" }}
+    >
       <div
         className="card"
         style={{
@@ -66,19 +65,29 @@ const ActiveAdvert = props => {
             </span>
             Edit
           </Link>
-          <Link
-            to={`/ad/delete/${id}`}
+          <span
             className="card-footer-item active-advert-delete"
+            onClick={() => {
+              DeleteAdvert(id);
+            }}
           >
             <span className="icon is-small" style={{ paddingRight: 15 }}>
               <i className="fas fa-times-circle"></i>
             </span>
             Delete
-          </Link>
+          </span>
         </footer>
       </div>
     </div>
   );
 };
 
-export default ActiveAdvert;
+const mapStateToProps = state => {
+  return {
+    userAdverts: state.user.adverts
+  };
+};
+
+export default connect(mapStateToProps, {
+  DeleteAdvert
+})(ActiveAdvert);

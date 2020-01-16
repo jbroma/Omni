@@ -2,13 +2,14 @@ import React from "react";
 import ProfileHero from "./Profile/ProfileHero";
 import AccountInformation from "./Profile/AccountInfo";
 import ProfileTabs from "./Profile/ProfileTabs";
-import { GetUserProfile } from "../../actions";
+import { GetUserProfile, GetLocations } from "../../actions";
 import { connect } from "react-redux";
 import Loading from "../Loading";
 
 class UserProfile extends React.Component {
   componentDidMount() {
     this.props.GetUserProfile();
+    this.props.GetLocations();
   }
 
   render() {
@@ -38,5 +39,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  GetUserProfile
+  GetUserProfile,
+  GetLocations
 })(UserProfile);

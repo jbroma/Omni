@@ -1,27 +1,45 @@
 import React from "react";
+import Moment from "react-moment";
+import { Link } from "react-router-dom";
 
-const ActiveConversation = () => {
+const ActiveConversation = props => {
+  const {
+    user_2: customer,
+    advert: advert_id,
+    title,
+    id,
+    last_updated
+  } = props.conversation;
   return (
     <div className="card-content" style={{ padding: "1rem 0.5rem" }}>
       <article className="media">
         <figure className="media-left">
           <p className="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/128x128.png" />
+            <img
+              src={customer.picture ? customer.picture : "/avatar128.png"}
+              className="fit-image"
+            />
           </p>
         </figure>
         <div className="media-content is-clipped">
           <div className="columns is-mobile">
             <div className="column">
-              <p className="title is-size-6">Wiedźmin 3 Xbox One Nowy</p>
+              <Link to={`/ad/show/${advert_id}`}>
+                <p className="title is-size-6">{title}</p>
+              </Link>
+
               <p className="subtitle is-size-6" stlyle={{ marginTop: "-1rem" }}>
-                from <strong>Jakub Romańczyk</strong>
+                from <strong>{customer.name}</strong>
               </p>
             </div>
             <div className="column is-narrow" style={{ paddingLeft: 0 }}>
               <p>
-                <small>25.12.2020</small>
+                <small>
+                  <Moment format="LLL" date={new Date(last_updated)} />
+                </small>
               </p>
-              <p
+              <Link
+                to={`/conversation/${id}`}
                 className="icon is-pulled-right has-text-primary"
                 style={{
                   marginTop: "1rem",
@@ -30,7 +48,7 @@ const ActiveConversation = () => {
                 }}
               >
                 <i className="fas fa-comments fa-2x"></i>
-              </p>
+              </Link>
             </div>
           </div>
         </div>

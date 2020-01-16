@@ -188,17 +188,34 @@ input::-webkit-calendar-picker-indicator {
 
 .active-advert-view {
   background-color: #ebfffc;
-  color: #00947e;
+  color: hsl(171, 100%, 41%);
+}
+
+.active-advert-view:hover {
+  cursor: pointer;
+  background-color: hsl(171, 100%, 41%);
+  color: hsl(0, 0%, 100%);
 }
 
 .active-advert-edit {
-  background-color: whitesmoke;
-  color: rgba(0, 0, 0, 0.7);
+  background-color: hsl(0, 0%, 96%);
+  color: hsl(0, 0%, 4%);
+}
+
+.active-advert-edit:hover {
+  cursor: pointer;
+  background-color: hsl(0, 0%, 86%);
 }
 
 .active-advert-delete {
   background-color: #feecf0;
-  color: #cc0f35;
+  color: hsl(348, 100%, 61%);
+}
+
+.active-advert-delete:hover {
+  cursor: pointer;
+  background-color: hsl(348, 100%, 61%);
+  color: hsl(0, 0%, 100%);
 }
 
 .fit-image {
@@ -206,3 +223,29 @@ input::-webkit-calendar-picker-indicator {
   width: 100% !important;
   height: 100% !important;
 }
+
+.image-gallery-slide img {
+  max-height: 100vh !important;
+}
+
+.ad-display-shadow {
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.card.profile-info > .card-content.active-advert {
+  padding-bottom: 0rem !important;
+}
+
+.card.profile-info > .card-content.active-advert:last-child {
+  padding-bottom: 0.2rem !important;
+}
+
+a.box:focus,
+a.box:hover {
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+    0 0 0 1px hsl(171, 100%, 41%);
+}
+/* a.category-card:hover a.category-card:focus {
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+    0 0 0 1px  !important;
+} */

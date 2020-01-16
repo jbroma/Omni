@@ -7,17 +7,15 @@ import Loading from "../../Loading";
 
 class ProfileHero extends React.Component {
   uploadProfilePicture = formValues => {
-    this.props.UploadProfilePicture({ picture: formValues.picture.file });
+    this.props.UploadProfilePicture({ picture: formValues.picture.item(0) });
+    this.props.reset();
   };
 
   renderPictureUploadButton({ input }) {
     delete input.value;
 
     const handleChange = e => {
-      input.onChange({
-        file: e.target.files[0],
-        name: e.target.files[0].name
-      });
+      input.onChange(e.target.files);
     };
 
     return (

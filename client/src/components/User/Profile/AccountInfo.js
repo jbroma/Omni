@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../Loading";
 import InfoParagraph from "./InfoParagraph";
+import _ from "lodash";
 
 class AccountInformation extends React.Component {
   render() {
-    if (!this.props.currentUser.name) {
+    if (_.isEmpty(this.props.currentUser) || _.isEmpty(this.props.locations)) {
       return <Loading />;
     } else {
       const { name, phone, location } = this.props.currentUser;
@@ -37,7 +38,12 @@ class AccountInformation extends React.Component {
                 </header>
                 <div className="card-content">
                   <InfoParagraph title={"Name:"} value={name} />
-                  <InfoParagraph title={"Location:"} value={location.name} />
+                  <InfoParagraph
+                    title={"Location:"}
+                    value={
+                      location ? this.props.locations[location].name : null
+                    }
+                  />
                   <InfoParagraph title={"Telephone number:"} value={phone} />
                 </div>
               </div>
@@ -51,7 +57,8 @@ class AccountInformation extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    currentUser: state.user
+    currentUser: state.user,
+    locations: state.locations
   };
 };
 

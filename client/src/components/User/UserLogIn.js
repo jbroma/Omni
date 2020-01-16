@@ -42,7 +42,7 @@ class UserLogIn extends React.Component {
       return <Redirect to="/user/profile" />;
     } else
       return (
-        <div>
+        <React.Fragment>
           <HeroTitle title={this.heroTitle} subtitle={this.heroSubtitle} />
           <section className="section">
             <div className="container">
@@ -103,7 +103,7 @@ class UserLogIn extends React.Component {
               </div>
             </div>
           </section>
-        </div>
+        </React.Fragment>
       );
   }
 }

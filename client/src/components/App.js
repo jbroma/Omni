@@ -24,7 +24,7 @@ const App = () => {
       <Header />
       <Switch>
         <Route path="/" exact component={Main} />
-        <Route path="/ad/search/:query" component={AdSearch} />
+        <Route path="/ad/search" exact component={AdSearch} />
         <Route path="/ad/show/:id" component={AdDisplay} />
         <ProtectedRoute path="/ad/create" exact component={AdCreate} />
         <ProtectedRoute path="/ad/edit/:id" component={AdEdit} />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import HeroTitle from "../common/HeroTitle";
 import LocationSearch from "../common/LocationSearch";
+import queryString from "query-string";
 
 const SearchTitle = props => {
   const title = (
@@ -216,36 +217,6 @@ const AdvertList = () => {
   );
 };
 
-const Pagination = () => {
-  return (
-    <div className="search-pagination">
-      <nav class="pagination" role="navigation" aria-label="pagination">
-        <ul class="pagination-list">
-          <li>
-            <a class="pagination-link " aria-label="Page 1" aria-current="page">
-              1
-            </a>
-          </li>
-          <li>
-            <a class="pagination-link is-current" aria-label="Goto page 2">
-              2
-            </a>
-          </li>
-          <li>
-            <a class="pagination-link" aria-label="Goto page 3">
-              3
-            </a>
-          </li>
-        </ul>
-        <a class="pagination-previous" title="This is the first page">
-          Previous
-        </a>
-        <a class="pagination-next">Next page</a>
-      </nav>
-    </div>
-  );
-};
-
 class AdSearch extends React.Component {
   render() {
     return (
@@ -256,7 +227,6 @@ class AdSearch extends React.Component {
           <div className="columns is-centered">
             <div className="column is-full">
               <AdvertList />
-              <Pagination />
             </div>
           </div>
         </section>

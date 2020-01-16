@@ -18,7 +18,20 @@ import {
   DELETE_USER,
   DELETE_USER_FAILED,
   CHANGE_PASSWORD,
-  CHANGE_PASSWORD_FAILED
+  CHANGE_PASSWORD_FAILED,
+  GET_LOCATIONS,
+  GET_CATEGORIES,
+  GET_CONVERSATION,
+  CREATE_NEW_MESSAGE_EXTERNAL,
+  CREATE_NEW_MESSAGE_INTERNAL,
+  GET_ADVERT,
+  GET_ADVERT_IMAGES,
+  CREATE_ADVERT,
+  CREATE_ADVERT_FAILED,
+  UPLOAD_ADVERT_IMAGE,
+  DELETE_ADVERT_IMAGE,
+  EDIT_ADVERT,
+  DELETE_ADVERT
 } from "./types";
 
 export const LogIn = formValues => async dispatch => {
@@ -151,7 +164,9 @@ export const EditUserProfile = formValues => async dispatch => {
 
 export const DeleteUser = formValues => async dispatch => {
   try {
-    await server.delete("/user/profile/", formValues);
+    await server.delete("/user/profile/", {
+      data: { ...formValues }
+    });
     dispatch({
       type: DELETE_USER
     });
@@ -169,7 +184,7 @@ export const DeleteUser = formValues => async dispatch => {
 
 export const ChangePassword = formValues => async dispatch => {
   try {
-    await server.put("/user/pass/", formValues);
+    await server.put("/user/password/", formValues);
     dispatch({
       type: CHANGE_PASSWORD
     });
@@ -180,4 +195,141 @@ export const ChangePassword = formValues => async dispatch => {
       payload: err.response.data
     });
   }
+};
+
+export const GetConversation = conversationId => async dispatch => {
+  try {
+    const response = await server.get(`/message/${conversationId}/`);
+    dispatch({
+      type: GET_CONVERSATION,
+      payload: response.data
+    });
+  } catch (err) {
+    history.push("/user/profile");
+  }
+};
+
+export const CreateNewMessageExternal = formValues => async dispatch => {
+  const response = await server.post("/message/new/", formValues);
+  dispatch({
+    type: CREATE_NEW_MESSAGE_EXTERNAL
+  });
+  history.push(`/conversation/${response.data.conversation}`);
+};
+
+export const CreateNewMessageInternal = (
+  formValues,
+  sender
+) => async dispatch => {
+  const response = await server.post("/message/new/", formValues);
+  dispatch({
+    type: CREATE_NEW_MESSAGE_INTERNAL,
+    payload: {
+      ...response.data,
+      sender
+    }
+  });
+};
+
+export const GetLocations = () => async dispatch => {
+  const response = await server.get("/locations/");
+  dispatch({
+    type: GET_LOCATIONS,
+    payload: response.data
+  });
+};
+
+export const GetCategories = () => async dispatch => {
+  const response = await server.get("/categories/");
+  dispatch({
+    type: GET_CATEGORIES,
+    payload: response.data
+  });
+};
+
+export const GetAdvert = advertId => async dispatch => {
+  try {
+    const response = await server.get(`/advert/${advertId}/`);
+    dispatch({
+      type: GET_ADVERT,
+      payload: response.data
+    });
+    dispatch({
+      type: GET_ADVERT_IMAGES,
+      payload: response.data.images
+    });
+  } catch (err) {
+    history.push("/");
+  }
+};
+
+export const CreateAdvert = formValues => async dispatch => {
+  try {
+    const response = await server.post("/advert/", formValues);
+    dispatch({
+      type: CREATE_ADVERT
+    });
+    history.push(`/ad/show/${response.data.id}`);
+  } catch (err) {
+    dispatch({
+      type: CREATE_ADVERT_FAILED,
+      payload: err.response.data
+    });
+  }
+};
+
+export const CheckAdvertOwnership = advertId => async () => {
+  try {
+    await server.get(`/advert/owner/${advertId}/`);
+  } catch (err) {
+    history.push("/user/profile");
+  }
+};
+
+export const EditAdvert = (formValues, advertId) => async dispatch => {
+  try {
+    await server.patch(`/advert/${advertId}/`, formValues);
+    dispatch({
+      type: EDIT_ADVERT
+    });
+    history.push(`/ad/show/${advertId}`);
+  } catch (err) {
+    dispatch({
+      type: CREATE_ADVERT_FAILED,
+      payload: err.response.data
+    });
+  }
+};
+
+export const DeleteAdvert = advertId => async dispatch => {
+  await server.delete(`/advert/${advertId}/`);
+  dispatch({
+    type: DELETE_ADVERT,
+    payload: advertId
+  });
+};
+
+export const UploadAdvertImage = (formValues, slotId) => async dispatch => {
+  const formData = new FormData();
+  formData.append("image", formValues.image);
+  const response = await server.post("/advert/image/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
+  dispatch({
+    type: UPLOAD_ADVERT_IMAGE,
+    payload: {
+      ...response.data,
+      slotId
+    }
+  });
+};
+
+export const DeleteAdvertImage = (imageId, slotId) => async dispatch => {
+  await server.delete(`/advert/image/${imageId}/`);
+  dispatch({
+    type: DELETE_ADVERT_IMAGE,
+    payload: slotId
+  });
 };
