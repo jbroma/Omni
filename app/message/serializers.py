@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from core.models import Conversation, Message, Advert
 
+from user.serializers import PublicUserSerializer
 
 class MessageSerializer(serializers.ModelSerializer):
     """Serializer for retrieving messages"""
@@ -73,7 +74,7 @@ class CreateMessageSerializer(serializers.Serializer):
         conversation = validated_data.get('conversation', None)
         if not conversation:
             advert = validated_data.get('advert')
-            conversation = Conversation.objects.create(
+            conversation, _ = Conversation.objects.get_or_create(
                 user_1=advert.user,
                 user_2=validated_data.get('sender'),
                 advert=advert
@@ -88,19 +89,24 @@ class CreateMessageSerializer(serializers.Serializer):
 
 class ConversationsSerializer(serializers.ModelSerializer):
     """Serializer for listing all conversations"""
+    user_1 = PublicUserSerializer()
+    user_2 = PublicUserSerializer()
+    
     class Meta:
         model = Conversation
         fields = (
-            'user_1', 'user_2', 'advert', 'title', 'last_updated'
+            'id', 'user_1', 'user_2', 'advert', 'title', 'last_updated'
         )
 
 
 class SingleConversationSerializer(serializers.ModelSerializer):
     """Serializer for a single Conversation"""
+    user_1 = PublicUserSerializer()
+    user_2 = PublicUserSerializer()
     messages = MessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Conversation
         fields = (
-            'user_1', 'user_2', 'advert', 'title', 'messages'
+            'id', 'user_1', 'user_2', 'advert', 'title', 'messages'
         )

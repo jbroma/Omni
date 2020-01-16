@@ -125,6 +125,17 @@ class PublicAdvertApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
+    def test_retrieve_specific_ad_with_images(self):
+        """Test retrieving ad with images"""
+        advert, ad_image_ids = sample_ad_with_images(title='Test1')
+        res = self.client.get(advert_detail_url(advert.id))
+        
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["id"], advert.id)
+        for index, img_id in enumerate(ad_image_ids):
+            self.assertEqual(res.data["images"][index]["id"], img_id)
+            
+
     def test_create_disallowed(self):
         """Test that unauthenticated users cant make new ads"""
         category = sample_category()

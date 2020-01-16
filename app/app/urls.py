@@ -26,5 +26,5 @@ urlpatterns = [
     path('api/message/', include('message.urls')),
     path('api/advert/', include('advert.urls')),
     path('api/categories/', CategoryListView.as_view(), name='categories'),
-    path('api/locations', LocationListView.as_view(), name='locations'),
+    path('api/locations/', LocationListView.as_view(), name='locations'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

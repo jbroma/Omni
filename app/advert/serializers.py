@@ -104,9 +104,8 @@ class AdvertRetrieveSerializer(serializers.ModelSerializer):
         images = AdvertImage.objects.filter(
             advertimagelink__advert=obj
         ).order_by('advertimagelink__slot')
-
-        image_list = [advert_image.image.url for advert_image in images]
-        return image_list
+        ctx = {'request': self.context.get('request')};
+        return AdvertImageSerializer(images, many=True, context=ctx).data
 
 
 class AdvertCreateUpdateSerializer(serializers.ModelSerializer):

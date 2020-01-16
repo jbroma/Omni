@@ -48,6 +48,13 @@ class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
         # for GET,PUT,PATCH use default serializer
         return self.serializer_class
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ChangeUserPasswordView(generics.UpdateAPIView):
     """Handle password change for the user"""

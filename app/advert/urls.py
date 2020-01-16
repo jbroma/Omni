@@ -15,7 +15,7 @@ app_name = 'advert'
 
 owner_pattern = [
     path(
-        'advert/owner/<int:pk>/',
+        'owner/<int:pk>/',
         views.AdvertOwnerView.as_view(),
         name='owner'
     )

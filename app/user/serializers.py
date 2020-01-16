@@ -62,7 +62,8 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user objects"""
     location = serializers.PrimaryKeyRelatedField(
         required=False,
-        queryset=Location.objects.all()
+        queryset=Location.objects.all(),
+        allow_null=True
     )
     picture = serializers.ImageField(
         max_length=None, use_url=True
@@ -99,7 +100,7 @@ class DeleteUserSerializer(serializers.Serializer):
         user = self.context.get('request').user
         if not user.check_password(attrs['password']):
             raise serializers.ValidationError(
-                "Your old password is incorrect",
+                "Your password is incorrect",
                 code='password_incorrect'
             )
 

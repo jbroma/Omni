@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from core.models import Advert
+from core.models import Advert, AdvertImageLink
 
 
 class IsAdvertOwnerOrReadOnly(permissions.BasePermission):
@@ -28,3 +28,5 @@ class IsAdvertImageOwnerOrReadOnly(permissions.BasePermission):
             obj.advertimagelink.advert.user == request.user
         except Advert.DoesNotExist:
             return False
+        except AttributeError:
+            return True
