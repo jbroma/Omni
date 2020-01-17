@@ -188,11 +188,10 @@ class AdvertLocationFilterTests(TestCase):
         sample_ad_with_images(title='Test_2', location=self.location_2)
         sample_ad_with_images(title='Test_3', location=self.location_3)
 
-    def test_filter_location_exact_match(self):
-        """Test filtering ads by location, with an exact match"""
-        location_name = self.location_1.name
+    def test_filter_location(self):
+        """Test filtering ads by location"""
         location_id = self.location_1.id
-        search_url = f'{ADVERTS_URL}?location={location_name}'
+        search_url = f'{ADVERTS_URL}?location={location_id}'
 
         res = self.client.get(search_url)
 
@@ -200,25 +199,26 @@ class AdvertLocationFilterTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(int(res.data[0]['location']['id']), location_id)
 
-    def test_filter_location_inexact_match(self):
-        """Test filtering ads by location, providing only part of a location"""
-        location_name = 'New'
-        search_url = f'{ADVERTS_URL}?location={location_name}'
+    # REASON: FILTER BY ID, NOT NAME
+    # def test_filter_location_inexact_match(self):
+    #     """Test filtering ads by location, providing only part of a location"""
+    #     location_name = 'New'
+    #     search_url = f'{ADVERTS_URL}?location={location_name}'
 
-        res = self.client.get(search_url)
+    #     res = self.client.get(search_url)
 
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 2)
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #     self.assertEqual(len(res.data), 2)
 
-    def test_filter_location_case_insensitive(self):
-        """Test filtering ads by location is case-insensitive"""
-        location_name = 'new'
-        search_url = f'{ADVERTS_URL}?location={location_name}'
+    # def test_filter_location_case_insensitive(self):
+    #     """Test filtering ads by location is case-insensitive"""
+    #     location_name = 'new'
+    #     search_url = f'{ADVERTS_URL}?location={location_name}'
 
-        res = self.client.get(search_url)
+    #     res = self.client.get(search_url)
 
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 2)
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #     self.assertEqual(len(res.data), 2)
 
 
 class AdvertOrderingFilterTests(TestCase):

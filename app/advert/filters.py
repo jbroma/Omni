@@ -16,9 +16,7 @@ class AdvertFilterSet(df.FilterSet):
     price__gte = df.NumberFilter(field_name='price', lookup_expr='gte')
     price__lte = df.NumberFilter(field_name='price', lookup_expr='lte')
 
-    location = df.CharFilter(
-        field_name='location__name', lookup_expr='icontains'
-    )
+    location = df.NumberFilter(field_name='location__id')
 
     ordering = df.OrderingFilter(
         fields=(
