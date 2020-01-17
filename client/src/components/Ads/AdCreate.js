@@ -7,7 +7,8 @@ import {
   CreateAdvert,
   GetUserProfile,
   GetLocations,
-  GetCategories
+  GetCategories,
+  ClearAdvertImages
 } from "../../actions";
 import _ from "lodash";
 import Loading from "../Loading";
@@ -31,6 +32,10 @@ class AdCreate extends React.Component {
     if (this.props.creationErrors) {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.ClearAdvertImages();
   }
 
   onSubmit = formValues => {
@@ -245,5 +250,6 @@ export default connect(mapStateToProps, {
   CreateAdvert,
   GetUserProfile,
   GetCategories,
-  GetLocations
+  GetLocations,
+  ClearAdvertImages
 })(formWrapped);

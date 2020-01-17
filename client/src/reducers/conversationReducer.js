@@ -3,7 +3,8 @@ import {
   GET_CONVERSATION,
   CREATE_NEW_MESSAGE_INTERNAL,
   LOG_OUT,
-  CREATE_NEW_MESSAGE_EXTERNAL
+  CREATE_NEW_MESSAGE_EXTERNAL,
+  CLEAR_CONVERSATION
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -17,6 +18,8 @@ export default (state = {}, action) => {
       };
     case CREATE_NEW_MESSAGE_EXTERNAL:
       return { ...state };
+    case CLEAR_CONVERSATION:
+      return {};
     case LOG_OUT:
       return {};
     default:

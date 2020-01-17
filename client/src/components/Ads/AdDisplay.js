@@ -2,7 +2,7 @@ import React from "react";
 import ImageGallery from "react-image-gallery";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { GetAdvert } from "../../actions";
+import { GetAdvert, ClearActiveAdvert, ClearAdvertImages } from "../../actions";
 import history from "../../history";
 import _ from "lodash";
 import Loading from "../Loading";
@@ -17,6 +17,11 @@ class AdDisplay extends React.Component {
     } else {
       this.props.GetAdvert(this.advertId);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.ClearActiveAdvert();
+    this.props.ClearAdvertImages();
   }
 
   renderHero = () => {
@@ -284,5 +289,7 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  GetAdvert
+  GetAdvert,
+  ClearActiveAdvert,
+  ClearAdvertImages
 })(AdDisplay);

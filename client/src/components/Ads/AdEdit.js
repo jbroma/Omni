@@ -9,7 +9,9 @@ import {
   GetAdvert,
   GetUserProfile,
   GetLocations,
-  GetCategories
+  GetCategories,
+  ClearActiveAdvert,
+  ClearAdvertImages
 } from "../../actions";
 import _ from "lodash";
 import Loading from "../Loading";
@@ -41,6 +43,11 @@ class AdEdit extends React.Component {
     if (editErrors) {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.ClearActiveAdvert();
+    this.props.ClearAdvertImages();
   }
 
   onSubmit = formValues => {
@@ -266,5 +273,7 @@ export default connect(mapStateToProps, {
   GetAdvert,
   GetUserProfile,
   GetCategories,
-  GetLocations
+  GetLocations,
+  ClearActiveAdvert,
+  ClearAdvertImages
 })(formWrapped);

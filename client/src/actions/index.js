@@ -31,7 +31,12 @@ import {
   UPLOAD_ADVERT_IMAGE,
   DELETE_ADVERT_IMAGE,
   EDIT_ADVERT,
-  DELETE_ADVERT
+  DELETE_ADVERT,
+  GET_ADVERTS,
+  CLEAR_ADVERTS,
+  CLEAR_ADVERT_IMAGES,
+  CLEAR_ACTIVE_ADVERT,
+  CLEAR_CONVERSATION
 } from "./types";
 
 export const LogIn = formValues => async dispatch => {
@@ -209,6 +214,12 @@ export const GetConversation = conversationId => async dispatch => {
   }
 };
 
+export const ClearConversation = () => dispatch => {
+  dispatch({
+    type: CLEAR_CONVERSATION
+  });
+};
+
 export const CreateNewMessageExternal = formValues => async dispatch => {
   const response = await server.post("/message/new/", formValues);
   dispatch({
@@ -331,5 +342,31 @@ export const DeleteAdvertImage = (imageId, slotId) => async dispatch => {
   dispatch({
     type: DELETE_ADVERT_IMAGE,
     payload: slotId
+  });
+};
+
+export const ClearAdvertImages = () => dispatch => {
+  dispatch({
+    type: CLEAR_ADVERT_IMAGES
+  });
+};
+
+export const GetAdverts = query => async dispatch => {
+  const response = await server.get(`/advert${query}`);
+  dispatch({
+    type: GET_ADVERTS,
+    payload: response.data
+  });
+};
+
+export const ClearActiveAdvert = () => dispatch => {
+  dispatch({
+    type: CLEAR_ACTIVE_ADVERT
+  });
+};
+
+export const ClearAdverts = () => dispatch => {
+  dispatch({
+    type: CLEAR_ADVERTS
   });
 };

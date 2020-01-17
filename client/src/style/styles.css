@@ -102,8 +102,8 @@ input::-webkit-calendar-picker-indicator {
   padding-bottom: 0.5rem;
 }
 
-.search-title span {
-  padding: 0 1rem !important;
+.search-title {
+  padding: 1rem 1rem !important;
 }
 
 .pagination-link.is-current {
@@ -117,7 +117,7 @@ input::-webkit-calendar-picker-indicator {
 
 .advert-list {
   border-radius: 0;
-  margin: 0 1px;
+  margin: 0 1px 1px 1px;
 }
 
 .advert-list .list-item {
@@ -128,16 +128,13 @@ input::-webkit-calendar-picker-indicator {
 
 .ad-price-tag {
   padding-left: 0.2rem;
+  margin: 0 !important;
 }
 
 .footer-column {
   padding-left: 0;
   padding-right: 0;
   padding-bottom: 0;
-}
-
-.ad-image-background {
-  background-color: hsl(0, 0%, 96%);
 }
 
 .ad-date-column {
@@ -243,9 +240,63 @@ input::-webkit-calendar-picker-indicator {
 a.box:focus,
 a.box:hover {
   box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
-    0 0 0 1px hsl(171, 100%, 41%);
+    0px 0px 10px 1px hsla(171, 100%, 41%, 0.4);
 }
-/* a.category-card:hover a.category-card:focus {
-  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
-    0 0 0 1px  !important;
-} */
+
+.select.is-primary > select {
+  border-color: rgb(219, 219, 219) !important;
+}
+
+.subtitle.is-size-7.conversation-middle {
+  margin-bottom: 0 !important;
+}
+
+.advert-listing {
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  height: 275px !important;
+}
+
+@media screen and (min-width: 501px) {
+  .advert-listing {
+    display: flex;
+    flex-direction: row;
+    height: 150px !important;
+  }
+}
+
+.advert-listing-image {
+  background-color: hsl(0, 0%, 96%);
+  flex-basis: 60% !important;
+}
+
+@media screen and (min-width: 651px) {
+  .advert-listing-image {
+    flex-basis: 35% !important;
+  }
+}
+
+@media screen and (min-width: 801px) {
+  .advert-listing-image {
+    flex-basis: 30% !important;
+  }
+}
+
+@media screen and (min-width: 1001px) {
+  .advert-listing-image {
+    flex-basis: 25% !important;
+  }
+}
+
+@media screen and (min-width: 1216px) {
+  .advert-listing-image {
+    flex-basis: 20% !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .list-item.columns.advert-listing:last-of-type .advert-listing-lowest-column {
+    margin-bottom: 3rem !important;
+  }
+}

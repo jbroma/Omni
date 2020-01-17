@@ -48,7 +48,15 @@ class Message extends React.Component {
                 </Moment>
               )}
             </p>
-            <p style={{ whiteSpace: "pre" }}>{this.props.content}</p>
+            <div className="container">
+              <p
+                style={{
+                  whiteSpace: "pre-wrap"
+                }}
+              >
+                {this.props.content}
+              </p>
+            </div>
           </div>
         </div>
         {this.props.currentUser ? (

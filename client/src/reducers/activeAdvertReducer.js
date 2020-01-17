@@ -4,7 +4,8 @@ import {
   CREATE_ADVERT_FAILED,
   CREATE_ADVERT,
   EDIT_ADVERT,
-  EDIT_ADVERT_FAILED
+  EDIT_ADVERT_FAILED,
+  CLEAR_ACTIVE_ADVERT
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -19,6 +20,8 @@ export default (state = {}, action) => {
       return _.omit(state, "edit_errors");
     case EDIT_ADVERT_FAILED:
       return { ...state, edit_errors: { ...action.payload } };
+    case CLEAR_ACTIVE_ADVERT:
+      return {};
     default:
       return state;
   }

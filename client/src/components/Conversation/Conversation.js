@@ -2,27 +2,38 @@ import React from "react";
 import HeroTitle from "../common/HeroTitle";
 import Message from "./Message";
 import MessageBox from "./MessageBox";
-import { GetConversation } from "../../actions";
+import { GetConversation, ClearConversation } from "../../actions";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import history from "../../history";
 import _ from "lodash";
 import Loading from "../Loading";
 
 const ConversationTitle = props => {
-  const title = (
-    <div className="search-title">
-      <span className="icon">
-        <i className="fas fa-comments"></i>
-      </span>
-      <span className="title is-3">
-        Conversation with <br />
-        <strong className="is-size-4">{props.user}</strong>
-      </span>
-    </div>
+  return (
+    <section className="hero is-primary" style={{ marginTop: "0.5rem" }}>
+      <div className="hero-body" style={{ padding: "0.8rem" }}>
+        <div className="container">
+          <span className="icon is-medium">
+            <i className="fas fa-comments fa-2x"></i>
+          </span>
+          <span className="title is-4 search-title">Conversation with:</span>
+          <br />
+          <span className="subtitle is-5">
+            <strong>{props.user}</strong>
+          </span>
+          <br />
+          {props.advert ? (
+            <Link to={`/ad/show/${props.advert}`} className="has-text-black">
+              <span className="subtitle is-4">{props.title}</span>
+            </Link>
+          ) : (
+            <span className="subtitle is-4">{props.title}</span>
+          )}
+        </div>
+      </div>
+    </section>
   );
-  const subtitle = <span className="subtitle is-4">{props.title}</span>;
-
-  return <HeroTitle title={title} subtitle={subtitle} />;
 };
 
 class Conversation extends React.Component {
@@ -39,6 +50,10 @@ class Conversation extends React.Component {
     const element = document.getElementById("message-box");
 
     element.scrollIntoView({ behavior: "smooth" });
+  }
+
+  componentWillUnmount() {
+    this.props.ClearConversation();
   }
 
   identifyUsers = () => {
@@ -83,11 +98,15 @@ class Conversation extends React.Component {
     if (_.isEmpty(this.props.conversation)) {
       return <Loading />;
     } else {
-      const { title } = this.props.conversation;
+      const { title, advert } = this.props.conversation;
       const { currentUser, otherUser } = this.identifyUsers();
       return (
         <div>
-          <ConversationTitle user={otherUser.name} title={title} />
+          <ConversationTitle
+            user={otherUser.name}
+            title={title}
+            advert={advert}
+          />
           <section
             className="section"
             style={{ paddingLeft: 0, paddingRight: 0, paddingTop: "1rem" }}
@@ -121,5 +140,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  GetConversation
+  GetConversation,
+  ClearConversation
 })(Conversation);

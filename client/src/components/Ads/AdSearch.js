@@ -1,238 +1,88 @@
 import React, { useState } from "react";
-import HeroTitle from "../common/HeroTitle";
-import LocationSearch from "../common/LocationSearch";
 import queryString from "query-string";
-
-const SearchTitle = props => {
-  const title = (
-    <div className="search-title">
-      <span className="icon">
-        <i className="fas fa-search"></i>
-      </span>
-      <span className="title is-4">Search results for:</span>
-    </div>
-  );
-  const subtitle = <span className="subtitle is-4">{props.query}</span>;
-
-  return <HeroTitle title={title} subtitle={subtitle} />;
-};
-
-const MainSearchBar = () => {
-  return (
-    <div className="columns is-centered">
-      <div className="column is-full">
-        <div className="notification">
-          <div className="columns is-centered">
-            <div className="column is-three-fifths">
-              <div className="field">
-                <div className="control has-icons-left">
-                  <input
-                    className="input is-medium"
-                    type="text"
-                    placeholder="E.g. Golden Retriever puppies"
-                  />
-                  <span className="icon is-small is-left">
-                    <i className="fas fa-search fa-lg"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="column">
-              <LocationSearch />
-            </div>
-            <div className="column is-narrow">
-              <button className="button is-primary is-light is-medium is-fullwidth has-text-weight-bold">
-                Search
-              </button>
-            </div>
-          </div>
-          <AdvancedSearch />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AdvancedSearchBar = () => {
-  return (
-    <div className="columns">
-      <div className="column is-full">
-        <div className="notification is-white">
-          <div className="columns is-multiline is-centered is-vcentered">
-            <div className="column is-narrow">
-              <div class="field">
-                <label class="label ">Category</label>
-
-                <p class="control has-icons-right is-expanded">
-                  <input
-                    list="categories"
-                    className="input"
-                    type="text"
-                    placeholder="Category"
-                  />
-                  <datalist id="categories">
-                    <option value="Internet Explorer" />
-                    <option value="Firefox" />
-                    <option value="Chrome" />
-                    <option value="Opera" />
-                    <option value="Safari" />
-                  </datalist>
-                  <span className="icon is-small is-right">
-                    <i className="fas fa-chevron-down"></i>
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div className="column is-narrow">
-              <div class="field">
-                <label class="label ">Min. price</label>
-                <p class="control is-expanded">
-                  <input class="input" type="number" placeholder="0" />
-                </p>
-              </div>
-            </div>
-            <div className="column is-narrow">
-              <div class="field">
-                <label class="label ">Max price</label>
-                <p class="control is-expanded">
-                  <input class="input" type="number" placeholder="0" />
-                </p>
-              </div>
-            </div>
-            <div className="column is-narrow">
-              <div class="field">
-                <label class="label ">Sort by</label>
-
-                <div class="select">
-                  <select>
-                    <option>Select dropdown</option>
-                    <option>With options</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="column">
-              <div class="field is-grouped is-grouped-centered">
-                <div class="control">
-                  <button class="button is-primary is-medium has-text-weight-bold">
-                    Filter
-                  </button>
-                </div>
-                <div class="control">
-                  <button class="button is-primary is-light is-medium has-text-weight-bold">
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AdvancedSearch = () => {
-  const [isToggled, setToggled] = useState(false);
-  const toggle = () => setToggled(!isToggled);
-
-  return (
-    <div className="columns is-centered">
-      <div className="column">
-        <div className="has-text centered">
-          <button className="button is-primary is-fullwidth" onClick={toggle}>
-            <span className=" has-text-weight-bold">Refine Search</span>
-            <span className="icon">
-              <i
-                className={`fas fa-${
-                  isToggled ? "minus" : "plus"
-                }-square fa-medium`}
-              ></i>
-            </span>
-          </button>
-          {isToggled ? <AdvancedSearchBar /> : null}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AdvertListing = () => {
-  return (
-    <div className="list-item columns is-mobile is-marginless">
-      <div className="column is-narrow ad-image-background">
-        <figure class=" image is-96x96">
-          <img src="https://picsum.photos/96" />
-        </figure>
-      </div>
-      <div className="column">
-        <div className="columns">
-          <div className="column">
-            <span className="title is-size-3 is-pulled-right ad-price-tag">
-              $1234
-            </span>
-            <p className="title is-5">Eyjafjallajokull</p>
-            <p className="subtitle is-6 has-text-grey">For Kids</p>
-            <div className="level is-mobile">
-              <div>
-                <div className="columns is-mobile is-vcentered">
-                  <div className="column is-narrow ">
-                    <span className="icon has-text-primary">
-                      <i className="fas fa-map-marker-alt fa-lg"></i>
-                    </span>
-                  </div>
-                  <div className="column is-paddingless has-text-justified">
-                    <span className="">Wrocław</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="columns is-mobile is-vcentered">
-                  <div className="column is-narrow">
-                    <span className="icon has-text-primary">
-                      <i className="fas fa-calendar-alt fa-lg"></i>
-                    </span>
-                  </div>
-                  <div className="column has-text-justified ad-date-column">
-                    <span className="">25.12.2020 15:36</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AdvertList = () => {
-  return (
-    <div className="list is-hoverable advert-list">
-      <AdvertListing />
-      <AdvertListing />
-      <AdvertListing />
-    </div>
-  );
-};
+import { connect } from "react-redux";
+import {
+  GetAdverts,
+  ClearAdverts,
+  GetCategories,
+  GetLocations
+} from "../../actions";
+import _ from "lodash";
+import Loading from "../Loading";
+import SearchTitle from "./SearchAds/SearchTitle";
+import AdvertListing from "./SearchAds/AdvertListing";
+import SearchBar from "./SearchAds/SearchBar";
 
 class AdSearch extends React.Component {
-  render() {
+  componentDidMount() {
+    const { search } = this.props.location;
+    this.queryParams = { ...queryString.parse(search) };
+    this.props.GetAdverts(search);
+    this.props.GetLocations();
+    this.props.GetCategories();
+  }
+
+  componentWillUnmount() {
+    this.props.ClearAdverts();
+  }
+
+  renderAdvertList = () => {
+    const { adverts } = this.props;
     return (
-      <div>
-        <SearchTitle query={"Wiedźmin 3 Xbox One nowy"} />
-        <section className="container is-clipped">
-          <MainSearchBar />
-          <div className="columns is-centered">
-            <div className="column is-full">
-              <AdvertList />
-            </div>
-          </div>
-        </section>
+      <div className="list is-hoverable advert-list">
+        <div
+          className="list-item notification is-primary"
+          style={{ marginBottom: 0, padding: "0.5rem 1rem 0.5rem 0.5rem" }}
+        >
+          <p className="subtitle is-size-6">
+            We've found{" "}
+            <strong className="is-size-5 has-text-white">
+              {Object.keys(adverts).length}
+            </strong>{" "}
+            results matching your criteria
+          </p>
+        </div>
+        {Object.values(adverts).map(ad => {
+          return <AdvertListing key={ad.id} advert={ad} />;
+        })}
       </div>
     );
+  };
+
+  render() {
+    const { categories, locations } = this.props;
+    if (_.isEmpty(categories) || _.isEmpty(locations)) {
+      return <Loading />;
+    } else {
+      return (
+        <React.Fragment>
+          <SearchTitle />
+          <section
+            className="container is-clipped"
+            style={{ paddingBottom: "1.5rem" }}
+          >
+            <SearchBar queryParams={this.queryParams} />
+            <div className="columns is-centered">
+              <div className="column is-full">{this.renderAdvertList()}</div>
+            </div>
+          </section>
+        </React.Fragment>
+      );
+    }
   }
 }
 
-export default AdSearch;
+const mapStateToProps = state => {
+  return {
+    categories: state.categories,
+    locations: state.locations,
+    adverts: state.adverts
+  };
+};
+
+export default connect(mapStateToProps, {
+  GetAdverts,
+  GetLocations,
+  GetCategories,
+  ClearAdverts
+})(AdSearch);

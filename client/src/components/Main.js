@@ -7,6 +7,7 @@ import _ from "lodash";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
 import history from "../history";
+import queryString from "query-string";
 
 class Main extends React.Component {
   componentDidMount() {
@@ -14,11 +15,8 @@ class Main extends React.Component {
   }
 
   onSubmit = formValues => {
-    let searchString = "/ad/search?";
-    Object.entries(formValues).map(entry => {
-      searchString = searchString + `${entry[0]}=${entry[1]}&`;
-    });
-    history.push(searchString);
+    const query = queryString.stringify(formValues);
+    history.push(`/ad/search?${query}`);
   };
 
   renderOptions = () => {

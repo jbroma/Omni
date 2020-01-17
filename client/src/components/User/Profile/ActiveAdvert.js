@@ -32,7 +32,10 @@ const ActiveAdvert = props => {
           <div className="media-content">
             <div
               className="content"
-              style={{ display: "flex", flexDirection: "column" }}
+              style={{
+                display: "flex",
+                flexDirection: "column"
+              }}
             >
               <p className="title is-size-6">{title}</p>
               <p className="subtitle is-size-6" style={{ marginTop: "-1rem" }}>

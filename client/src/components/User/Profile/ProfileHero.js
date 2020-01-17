@@ -29,11 +29,21 @@ class ProfileHero extends React.Component {
             accept=".jpg, .png, .jpeg"
             onChange={handleChange}
           />
-          <span className="file-cta">
+          <span
+            className="file-cta"
+            style={{
+              width: 100,
+              paddingLeft: "0.75em",
+              paddingRight: "0.75em"
+            }}
+          >
             <span className="file-icon">
               <i className="fas fa-edit"></i>
             </span>
-            <span className="file-label has-text-weight-bold">
+            <span
+              className="file-label has-text-weight-bold"
+              style={{ width: 96 }}
+            >
               Edit picture
             </span>
           </span>

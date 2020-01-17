@@ -7,10 +7,12 @@ import locationsReducer from "./locationsReducer";
 import conversationReducer from "./conversationReducer";
 import activeAdvertReducer from "./activeAdvertReducer";
 import imageReducer from "./imageReducer";
+import advertsReducer from "./advertsReducer";
 
 export default combineReducers({
   auth: authReducer,
   advert: activeAdvertReducer,
+  adverts: advertsReducer,
   categories: categoriesReducer,
   conversation: conversationReducer,
   form: formReducer,

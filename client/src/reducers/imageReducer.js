@@ -2,7 +2,8 @@ import _ from "lodash";
 import {
   UPLOAD_ADVERT_IMAGE,
   DELETE_ADVERT_IMAGE,
-  GET_ADVERT_IMAGES
+  GET_ADVERT_IMAGES,
+  CLEAR_ADVERT_IMAGES
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -16,6 +17,8 @@ export default (state = {}, action) => {
       };
     case DELETE_ADVERT_IMAGE:
       return _.omit(state, `${action.payload}`);
+    case CLEAR_ADVERT_IMAGES:
+      return {};
     default:
       return state;
   }
