@@ -1,5 +1,9 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL: "http://192.168.1.14:8000/api"
+const Server = axios.create({
+  baseURL: `http://${process.env.REACT_APP_CURRENT_IP}:8000/api`
 });
+
+console.log(Server.defaults.baseURL);
+
+export default Server;

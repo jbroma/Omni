@@ -352,7 +352,7 @@ export const ClearAdvertImages = () => dispatch => {
 };
 
 export const GetAdverts = query => async dispatch => {
-  const response = await server.get(`/advert${query}`);
+  const response = await server.get(`/advert${query ? query : "/"}`);
   dispatch({
     type: GET_ADVERTS,
     payload: response.data

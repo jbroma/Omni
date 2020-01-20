@@ -9,6 +9,7 @@ import reducers from "./reducers";
 
 import "bulma/css/bulma.min.css";
 import "react-image-gallery/styles/css/image-gallery.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./style/styles.css";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -10,6 +10,9 @@ import history from "../../../history";
 
 class SearchBar extends React.Component {
   onSubmit = formValues => {
+    if (formValues.location === "Everywhere") {
+      formValues.location = null;
+    }
     const query = queryString.stringify(formValues, { skipNull: true });
     this.props.GetAdverts(`?${query}`);
     history.push(`/ad/search?${query}`);

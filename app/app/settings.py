@@ -164,5 +164,7 @@ SILENCED_SYSTEM_CHECKS = ['auth.E003', 'auth.W004']
 
 # CORS - for development purposes, set to true for all origins.
 CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = False
+# SECURE_SSL_REDIRECT = False
 # TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # SECURE_SSL_REDIRECT = False if TESTING else True
