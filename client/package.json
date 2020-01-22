@@ -20,7 +20,8 @@
     "react-scripts": "3.3.0",
     "redux": "^4.0.5",
     "redux-form": "^8.2.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "validator": "^12.1.0"
   },
   "scripts": {
     "start": "REACT_APP_CURRENT_IP=$(hostname -i | gawk '{ print $1 }') REACT_APP_HOST=$(hostname -i | gawk '{ print $1 }') react-scripts start",

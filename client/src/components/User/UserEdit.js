@@ -7,6 +7,8 @@ import { GetUserProfile, GetLocations, EditUserProfile } from "../../actions";
 import _ from "lodash";
 import Loading from "../Loading";
 import ErrorMessage from "../common/ErrorMessage";
+import { isMobileNumberUK } from "../../validators";
+import isDirty from "redux-form/lib/isDirty";
 
 class UserEdit extends React.Component {
   constructor(props) {
@@ -52,7 +54,14 @@ class UserEdit extends React.Component {
     );
   };
 
-  renderInput = ({ input, label, type, placeholder, iconLeft }) => {
+  renderInput = ({
+    input,
+    label,
+    type,
+    placeholder,
+    iconLeft,
+    meta: { touched, error }
+  }) => {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -67,6 +76,7 @@ class UserEdit extends React.Component {
             <i className={`fas fa-${iconLeft}`}></i>
           </span>
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   };
@@ -85,6 +95,10 @@ class UserEdit extends React.Component {
       });
     }
   };
+
+  normalizePhoneNumber(phoneNumber) {
+    return phoneNumber.replace(/[\ ]/g, "");
+  }
 
   render() {
     const { currentUser, locations } = this.props;
@@ -123,8 +137,10 @@ class UserEdit extends React.Component {
                     component={this.renderInput}
                     label={"Telephone number"}
                     type={"text"}
-                    placeholder={"123 456 789"}
+                    placeholder={"+44 7700 900459"}
                     iconLeft={"phone"}
+                    normalize={this.normalizePhoneNumber}
+                    validate={isMobileNumberUK}
                   />
                   <hr />
                   <div className="field is-grouped is-grouped-centered">
@@ -155,7 +171,8 @@ class UserEdit extends React.Component {
 }
 
 const formWrapped = reduxForm({
-  form: "userEdit"
+  form: "userEdit",
+  enableReinitialize: true
 })(UserEdit);
 
 const mapStateToProps = state => {
@@ -163,7 +180,8 @@ const mapStateToProps = state => {
     currentUser: state.user,
     editErrors: state.user.edit_errors,
     locations: state.locations,
-    initialValues: _.omit(state.user, "picture")
+    initialValues: _.omit(state.user, "picture"),
+    shouldError: () => isDirty("userEdit")(state)
   };
 };
 

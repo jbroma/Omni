@@ -15,7 +15,10 @@ class Main extends React.Component {
   }
 
   onSubmit = formValues => {
-    const query = queryString.stringify(formValues);
+    if (formValues.location === "Everywhere") {
+      formValues.location = null;
+    }
+    const query = queryString.stringify(formValues, { skipNull: true });
     history.push(`/ad/search?${query}`);
   };
 

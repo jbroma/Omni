@@ -6,6 +6,15 @@ import HeroTitle from "../common/HeroTitle";
 import { connect } from "react-redux";
 import { SignUp } from "../../actions";
 import ErrorMessage from "../common/ErrorMessage";
+import {
+  notEmpty,
+  isEmail,
+  passwordLength,
+  passwordLowercase,
+  passwordUppercase,
+  passwordNumber,
+  passwordSpecial
+} from "../../validators";
 
 class UserSignUp extends React.Component {
   constructor(props) {
@@ -16,7 +25,14 @@ class UserSignUp extends React.Component {
 
   componentDidMount() {}
 
-  renderInput({ input, label, type, placeholder, icon }) {
+  renderInput({
+    input,
+    label,
+    type,
+    placeholder,
+    icon,
+    meta: { touched, error }
+  }) {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -31,6 +47,7 @@ class UserSignUp extends React.Component {
             <i className={`fas fa-${icon}`}></i>
           </span>
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   }
@@ -70,6 +87,7 @@ class UserSignUp extends React.Component {
                     type="text"
                     placeholder="Your full name"
                     icon="user"
+                    validate={notEmpty}
                   />
 
                   <Field
@@ -79,6 +97,7 @@ class UserSignUp extends React.Component {
                     type="email"
                     placeholder="name@company.com"
                     icon="envelope"
+                    validate={[notEmpty, isEmail]}
                   />
 
                   <Field
@@ -88,6 +107,14 @@ class UserSignUp extends React.Component {
                     type="password"
                     placeholder="Password"
                     icon="lock"
+                    validate={[
+                      notEmpty,
+                      passwordLength,
+                      passwordLowercase,
+                      passwordUppercase,
+                      passwordNumber,
+                      passwordSpecial
+                    ]}
                   />
 
                   <Field
@@ -97,6 +124,14 @@ class UserSignUp extends React.Component {
                     type="password"
                     placeholder="Password"
                     icon="lock"
+                    validate={[
+                      notEmpty,
+                      passwordLength,
+                      passwordLowercase,
+                      passwordUppercase,
+                      passwordNumber,
+                      passwordSpecial
+                    ]}
                   />
 
                   <hr />

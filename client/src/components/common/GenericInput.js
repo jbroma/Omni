@@ -9,7 +9,8 @@ const GenericInput = ({
   placeholder,
   inputSize,
   icon,
-  iconSize
+  iconSize,
+  meta: { touched, error }
 }) => {
   return (
     <div className="field">
@@ -29,6 +30,7 @@ const GenericInput = ({
           </span>
         ) : null}
       </div>
+      {touched && error && <p className="help is-danger">{error}</p>}
     </div>
   );
 };

@@ -18,6 +18,15 @@ import Loading from "../Loading";
 import ImageUploadSection from "../common/ImageUploadSection";
 import ErrorMessage from "../common/ErrorMessage";
 import history from "../../history";
+import {
+  notEmpty,
+  titleLength,
+  validCategory,
+  isCurrency,
+  minPrice,
+  maxPrice,
+  validLocation
+} from "../../validators";
 
 class AdEdit extends React.Component {
   constructor(props) {
@@ -61,7 +70,12 @@ class AdEdit extends React.Component {
     );
   };
 
-  renderTextArea = ({ input, label, placeholder }) => {
+  renderTextArea = ({
+    input,
+    label,
+    placeholder,
+    meta: { touched, error }
+  }) => {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -73,11 +87,12 @@ class AdEdit extends React.Component {
             {...input}
           />
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   };
 
-  renderSelect = ({ input, label, options }) => {
+  renderSelect = ({ input, label, options, meta: { touched, error } }) => {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -86,6 +101,7 @@ class AdEdit extends React.Component {
             <select {...input}>{options}</select>
           </div>
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   };
@@ -103,7 +119,12 @@ class AdEdit extends React.Component {
     );
   };
 
-  renderNumericalInput = ({ input, label, placeholder }) => {
+  renderNumericalInput = ({
+    input,
+    label,
+    placeholder,
+    meta: { touched, error }
+  }) => {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -117,11 +138,17 @@ class AdEdit extends React.Component {
             {...input}
           />
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   };
 
-  renderTextInput = ({ input, label, placeholder }) => {
+  renderTextInput = ({
+    input,
+    label,
+    placeholder,
+    meta: { touched, error }
+  }) => {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -133,6 +160,7 @@ class AdEdit extends React.Component {
             {...input}
           />
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   };
@@ -177,30 +205,35 @@ class AdEdit extends React.Component {
                       component={this.renderTextInput}
                       label={"Title"}
                       placeholder={"Your ad title"}
+                      validate={[notEmpty, titleLength]}
                     />
                     <Field
                       name="category"
                       component={this.renderSelect}
                       label={"Category"}
                       options={this.renderOptions(this.props.categories)}
+                      validate={validCategory}
                     />
                     <Field
                       name="price"
                       component={this.renderNumericalInput}
                       label={"Price"}
                       placeholder={"999.99"}
+                      validate={[notEmpty, isCurrency, minPrice, maxPrice]}
                     />
                     <Field
                       name="location"
                       component={this.renderSelect}
                       label={"Location"}
                       options={this.renderOptions(this.props.locations)}
+                      validate={validLocation}
                     />
                     <Field
                       name="content"
                       component={this.renderTextArea}
                       label={"Content"}
                       placeholder={"Provide some details here"}
+                      validate={notEmpty}
                     />
                     {/* <div className="field">
                   <label className="label">Telephone number</label>

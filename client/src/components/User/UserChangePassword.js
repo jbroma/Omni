@@ -5,6 +5,14 @@ import { Link } from "react-router-dom";
 import { Field, reduxForm } from "redux-form";
 import { ChangePassword } from "../../actions";
 import ErrorMessage from "../common/ErrorMessage";
+import {
+  notEmpty,
+  passwordLength,
+  passwordLowercase,
+  passwordUppercase,
+  passwordNumber,
+  passwordSpecial
+} from "../../validators";
 
 class UserChangePassword extends React.Component {
   constructor(props) {
@@ -14,7 +22,14 @@ class UserChangePassword extends React.Component {
       "Enter your old password along with your new password to change it.";
   }
 
-  renderInput = ({ input, label, type, placeholder, icon }) => {
+  renderInput = ({
+    input,
+    label,
+    type,
+    placeholder,
+    icon,
+    meta: { touched, error }
+  }) => {
     return (
       <div className="field">
         <label className="label">{label}</label>
@@ -29,6 +44,7 @@ class UserChangePassword extends React.Component {
             <i className={`fas fa-${icon}`}></i>
           </span>
         </div>
+        {touched && error && <p className="help is-danger">{error}</p>}
       </div>
     );
   };
@@ -65,6 +81,7 @@ class UserChangePassword extends React.Component {
                   type={"password"}
                   placeholder={"Password"}
                   icon={"lock"}
+                  validate={notEmpty}
                 />
                 <Field
                   name="new_password_1"
@@ -73,6 +90,14 @@ class UserChangePassword extends React.Component {
                   type={"password"}
                   placeholder={"Password"}
                   icon={"lock"}
+                  validate={[
+                    notEmpty,
+                    passwordLength,
+                    passwordLowercase,
+                    passwordUppercase,
+                    passwordNumber,
+                    passwordSpecial
+                  ]}
                 />
                 <Field
                   name="new_password_2"
@@ -81,6 +106,14 @@ class UserChangePassword extends React.Component {
                   type={"password"}
                   placeholder={"Password"}
                   icon={"lock"}
+                  validate={[
+                    notEmpty,
+                    passwordLength,
+                    passwordLowercase,
+                    passwordUppercase,
+                    passwordNumber,
+                    passwordSpecial
+                  ]}
                 />
                 <hr />
                 <div className="field is-grouped is-grouped-centered">
