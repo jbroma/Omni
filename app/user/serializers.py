@@ -2,8 +2,11 @@ from django.core import exceptions
 from django.contrib.auth import get_user_model, authenticate, \
     password_validation
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 
 from rest_framework import serializers
+
+from phonenumber_field.serializerfields import PhoneNumberField
 
 from core.utils import EmailNotUniqueError
 from core.models import Location
@@ -48,13 +51,17 @@ def check_email_in_use(email):
             code='email_in_use'
         )
 
+
 class PublicUserSerializer(serializers.ModelSerializer):
     """Serializer for nesting public user data"""
+    date_created = serializers.DateTimeField(
+        default_timezone=timezone.get_current_timezone()
+    )
 
     class Meta:
         model = get_user_model()
         fields = (
-            'id', 'name', 'picture'
+            'id', 'name', 'picture', 'date_created'
         )
 
 
@@ -68,17 +75,20 @@ class UserSerializer(serializers.ModelSerializer):
     picture = serializers.ImageField(
         max_length=None, use_url=True
     )
+    phone = PhoneNumberField(required=False)
 
     class Meta:
         model = get_user_model()
         fields = (
             'id', 'email', 'name',
-            'phone', 'location', 'picture'
+            'phone', 'location', 'picture',
+            'date_created'
         )
         extra_kwargs = {
             'id': {'read_only': True},
             'email': {'read_only': True},
-            'name': {'read_only': True}
+            'name': {'read_only': True},
+            'date_created': {'read_only': True}
         }
 
 
@@ -118,12 +128,13 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         required=False,
         queryset=Location.objects.all()
     )
+    phone = PhoneNumberField(required=False)
 
     class Meta:
         model = get_user_model()
         fields = (
-            'email', 'password', 'confirm_password', 'name', 'phone',
-            'location', 'picture'
+            'email', 'password', 'confirm_password', 'name',
+            'phone', 'location', 'picture'
         )
         extra_kwargs = {
             'password': {

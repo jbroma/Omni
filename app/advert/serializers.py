@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from phonenumber_field.serializerfields import PhoneNumberField
+
 from core.models import (
     Category, Location, Advert, AdvertImage, AdvertImageLink
 )
@@ -91,11 +93,12 @@ class AdvertRetrieveSerializer(serializers.ModelSerializer):
     user = PublicUserSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
     location = LocationSerializer(read_only=True)
+    phone = PhoneNumberField(read_only=True)
 
     class Meta:
         model = Advert
         fields = (
-            'id', 'user', 'title', 'category', 'price', 'location',
+            'id', 'user', 'title', 'category', 'price', 'phone', 'location',
             'content', 'date_created', 'date_refreshed', 'images'
         )
         read_only_fields = ('id', 'date_created', 'date_refreshed')
@@ -114,11 +117,12 @@ class AdvertCreateUpdateSerializer(serializers.ModelSerializer):
          many=True, required=False, write_only=True,
          queryset=AdvertImage.objects.all()
     )
+    phone = PhoneNumberField(required=True)
 
     class Meta:
         model = Advert
         fields = (
-            'id', 'title', 'category', 'price', 'location',
+            'id', 'title', 'category', 'price', 'phone', 'location',
             'content', 'date_created', 'date_refreshed', 'images'
         )
         read_only_fields = ('id', 'date_created', 'date_refreshed')

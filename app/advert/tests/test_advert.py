@@ -233,13 +233,15 @@ class PrivateAdvertApiTests(TestCase):
             'title': 'AdTitle',
             'category': category.id,
             'price': 10.50,
+            'phone': '+447701900774',
             'location': location.id,
             'content': 'Example Advert Content',
         }
         res = self.client.post(ADVERTS_URL, payload)
-        new_advert = Advert.objects.get(id=res.data['id'])
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        new_advert = Advert.objects.get(id=res.data['id'])
         payload['category'] = category
         payload['location'] = location
 
@@ -259,6 +261,7 @@ class PrivateAdvertApiTests(TestCase):
             'title': 'AdTitle',
             'category': category.id,
             'price': 10.50,
+            'phone': '+447701900774',
             'location': location.id,
             'content': 'Example Advert Content',
             'images': [image_1['id'], image_2['id']]

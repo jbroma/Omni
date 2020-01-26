@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'django_extensions',
     'django_filters',
+    'phonenumber_field',
     'core',
     'user',
     'message',
@@ -139,14 +141,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Warsaw'
+USE_TZ = True
+
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -164,7 +167,6 @@ SILENCED_SYSTEM_CHECKS = ['auth.E003', 'auth.W004']
 
 # CORS - for development purposes, set to true for all origins.
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ALLOW_CREDENTIALS = False
-# SECURE_SSL_REDIRECT = False
+
 # TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # SECURE_SSL_REDIRECT = False if TESTING else True

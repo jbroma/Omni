@@ -31,6 +31,7 @@ import {
   UPLOAD_ADVERT_IMAGE,
   DELETE_ADVERT_IMAGE,
   EDIT_ADVERT,
+  EDIT_ADVERT_FAILED,
   DELETE_ADVERT,
   GET_ADVERTS,
   CLEAR_ADVERTS,
@@ -306,7 +307,7 @@ export const EditAdvert = (formValues, advertId) => async dispatch => {
     history.push(`/ad/show/${advertId}`);
   } catch (err) {
     dispatch({
-      type: CREATE_ADVERT_FAILED,
+      type: EDIT_ADVERT_FAILED,
       payload: err.response.data
     });
   }

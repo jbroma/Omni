@@ -25,7 +25,8 @@ import {
   isCurrency,
   minPrice,
   maxPrice,
-  validLocation
+  validLocation,
+  isMobileNumberUK
 } from "../../validators";
 
 class AdEdit extends React.Component {
@@ -176,6 +177,10 @@ class AdEdit extends React.Component {
     }
   };
 
+  normalizePhoneNumber(phoneNumber) {
+    return phoneNumber.replace(/[\ ]/g, "");
+  }
+
   render() {
     const { currentAdvert, currentUser, locations, categories } = this.props;
     if (
@@ -229,25 +234,20 @@ class AdEdit extends React.Component {
                       validate={validLocation}
                     />
                     <Field
+                      name="phone"
+                      component={this.renderTextInput}
+                      label={"Telephone number"}
+                      placeholder={"+44 7700 90045"}
+                      normalize={this.normalizePhoneNumber}
+                      validate={isMobileNumberUK}
+                    />
+                    <Field
                       name="content"
                       component={this.renderTextArea}
                       label={"Content"}
                       placeholder={"Provide some details here"}
                       validate={notEmpty}
                     />
-                    {/* <div className="field">
-                  <label className="label">Telephone number</label>
-                  <div className="control">
-                    <input
-                      className="input"
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      pattern="[+]{1}[0-9]{11,14}"
-                    />
-                  </div>
-                  <p className="help">Use my telephone number from profile</p>
-                </div> */}
                   </Form>
                   <hr />
                   <ImageUploadSection />

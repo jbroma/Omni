@@ -11,6 +11,8 @@ from django.contrib.auth.models import (
 
 from django_cryptography.fields import encrypt
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 from core.utils import EmailNotUniqueError, make_thumbnail
 from core.signals import TITLE_CHANGED, USER_DELETED
 
@@ -79,13 +81,14 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports emails instead of username"""
-    email = models.EmailField(max_length=255)
+    email = models.EmailField()
     name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=17, blank=True)
+    phone = PhoneNumberField(blank=True)
     location = models.ForeignKey(
         'Location', on_delete=models.PROTECT, null=True, blank=True
     )
     picture = models.ImageField(upload_to=profile_image_file_path, blank=True)
+    date_created = models.DateTimeField(default=timezone.now, editable=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -133,9 +136,10 @@ class Advert(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT
     )
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=60)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    price = models.DecimalField(max_digits=11, decimal_places=2)
+    phone = PhoneNumberField()
     location = models.ForeignKey(Location, on_delete=models.PROTECT)
     content = models.TextField(max_length=10000)
     date_created = models.DateTimeField(default=timezone.now, editable=False)
@@ -175,7 +179,7 @@ class AdvertImageLink(models.Model):
     """Link between AdvertImage and Advert"""
     advert = models.ForeignKey(Advert, on_delete=models.CASCADE)
     image = models.ForeignKey(AdvertImage, on_delete=models.CASCADE)
-    slot = models.SmallIntegerField()
+    slot = models.PositiveSmallIntegerField()
 
     class Meta:
         unique_together = ('advert', 'slot',)
@@ -197,7 +201,7 @@ class Conversation(models.Model):
         related_name='customer'
     )
     advert = models.ForeignKey(Advert, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=100, editable=False)
+    title = models.CharField(max_length=60, editable=False)
     last_updated = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):

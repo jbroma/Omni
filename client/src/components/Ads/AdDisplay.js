@@ -99,7 +99,7 @@ class AdDisplay extends React.Component {
   };
 
   renderAdvertInfo = () => {
-    const { price, user, location } = this.props.advert;
+    const { price, phone, user, location } = this.props.advert;
     return (
       <div
         className="notification is-white has-text-right"
@@ -115,17 +115,18 @@ class AdDisplay extends React.Component {
             <span className=" title is-2 level-item">£{price}</span>
           </div>
         </div>
-
-        <div className="box level is-mobile ad-display-shadow">
-          <div className="level-left icon">
-            <span className="icon has-text-primary level-item">
-              <i className="fas fa-phone fa-2x"></i>
-            </span>
+        {phone ? (
+          <div className="box level is-mobile ad-display-shadow">
+            <div className="level-left icon">
+              <span className="icon has-text-primary level-item">
+                <i className="fas fa-phone fa-2x"></i>
+              </span>
+            </div>
+            <div className="level-right">
+              <span className="title is-4 level-item">{phone}</span>
+            </div>
           </div>
-          <div className="level-right">
-            <span className="title is-4 level-item">531 312 312</span>
-          </div>
-        </div>
+        ) : null}
 
         <div className="box level is-mobile ad-display-shadow">
           <div className="level-left icon">
@@ -168,6 +169,15 @@ class AdDisplay extends React.Component {
                   <i className="fas fa-map-marker-alt fa-lg"></i>
                 </span>
                 <span className="subtitle is-6">{location.name}</span>
+              </p>
+              <p className="user-info-para">
+                <span className="icon has-text-primary user-info-icon">
+                  <i className="fas fa-history fa-lg"></i>
+                </span>
+                <span className="subtitle is-6">
+                  since&nbsp;
+                  <Moment calendar>{user.date_created}</Moment>
+                </span>
               </p>
             </div>
           </div>

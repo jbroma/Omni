@@ -167,7 +167,8 @@ class PrivateUserApiTests(TestCase):
             'email': self.user.email,
             'phone': '',
             'location': None,
-            'picture': None
+            'picture': None,
+            'date_created': self.user.date_created.isoformat()[:-6] + 'Z'
         })
 
     def test_post_me_not_allowed(self):
@@ -180,14 +181,14 @@ class PrivateUserApiTests(TestCase):
         location_name = 'Test Location'
         location = Location.objects.create(name=location_name)
         payload = {
-            'phone': '+48323532312',
+            'phone': '+447701900774',
             'location': location.id
         }
         res = self.client.patch(PROFILE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.phone, '+48323532312')
+        self.assertEqual(self.user.phone, '+447701900774')
         self.assertEqual(self.user.location, location)
 
     def test_update_user_profile_disabled_fields(self):
