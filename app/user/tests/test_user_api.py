@@ -171,8 +171,8 @@ class PrivateUserApiTests(TestCase):
             'date_created': self.user.date_created.isoformat()[:-6] + 'Z'
         })
 
-    def test_post_me_not_allowed(self):
-        """Test that POST request is not allowed on the me url"""
+    def test_post_profile_not_allowed(self):
+        """Test that POST request is not allowed on the profile url"""
         res = self.client.post(PROFILE_URL)
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 

@@ -22,7 +22,7 @@ class PublicLocationsAPITests(TestCase):
         res = self.client.get(LOCATIONS_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_list_categories_format(self):
+    def test_list_locations_format(self):
         """Test listing all locations returns id, name and url"""
         sample_location(name='TestLocation_1')
         sample_location(name='TestLocation_2')

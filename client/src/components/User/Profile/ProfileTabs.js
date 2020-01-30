@@ -32,11 +32,16 @@ class ProfileTabs extends React.Component {
   }
 
   renderActiveConversations(conversations) {
+    const { id } = this.props.currentUser;
     if (!conversations || _.isEmpty(conversations)) {
       return <NoActiveObjects name="conversations" />;
     } else {
       return Object.values(conversations).map(conv => (
-        <ActiveConversation key={conv.id} conversation={conv} />
+        <ActiveConversation
+          key={conv.id}
+          conversation={conv}
+          currentUserId={id}
+        />
       ));
     }
   }
