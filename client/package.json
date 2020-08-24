@@ -24,7 +24,7 @@
     "validator": "^12.1.0"
   },
   "scripts": {
-    "start": "REACT_APP_CURRENT_IP=$(hostname -i | gawk '{ print $1 }') REACT_APP_HOST=$(hostname -i | gawk '{ print $1 }') react-scripts start",
+    "start": "REACT_APP_CURRENT_IP=$(hostname -I | gawk '{ print $1 }') REACT_APP_HOST=$(hostname -I | gawk '{ print $1 }') react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
