@@ -65,4 +65,5 @@ If you are using an ad-blocker, some requests might get blocked, reporting in br
 
 ## Screenshots
 
-![](media/main.png | width=100) ![](media/search.png | width=100) ![](media/ad.png | width=100) ![](media/profile.png | width=100)
+<p align="center"><img src="media/main.png" width="400" hspace="20"/><img src="media/search.png" width="400" hspace="20"/></p>
+<p align="center"><img src="media/ad.png" width="400" hspace="20" /><img src="media/profile.png" width="400" hspace="20"/></p>
