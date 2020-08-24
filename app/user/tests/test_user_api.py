@@ -2,10 +2,10 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-
 from rest_framework.test import APIClient
 from rest_framework import status
 
+from pytz import timezone as TZone
 from core.models import Location
 
 CREATE_USER_URL = reverse('user:create')
@@ -161,14 +161,16 @@ class PrivateUserApiTests(TestCase):
         """Test retrieving profile for logged in user"""
         res = self.client.get(PROFILE_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, {
+        self.assertDictEqual(res.data, {
             'id': self.user.id,
             'name': self.user.name,
             'email': self.user.email,
             'phone': '',
             'location': None,
             'picture': None,
-            'date_created': self.user.date_created.isoformat()[:-6] + 'Z'
+            'date_created': self.user.date_created
+                .astimezone(tz=TZone('Europe/London'))
+                .isoformat(),
         })
 
     def test_post_profile_not_allowed(self):
