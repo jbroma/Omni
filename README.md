@@ -65,5 +65,5 @@ If you are using an ad-blocker, some requests might get blocked, reporting in br
 
 ## Screenshots
 
-<p align="center"><img src="media/main.png" width="400" hspace="20"/><img src="media/search.png" width="400" hspace="20"/></p>
-<p align="center"><img src="media/ad.png" width="400" hspace="20" /><img src="media/profile.png" width="400" hspace="20"/></p>
+<p align="center"><img src="media/main.png" width="300" hspace="20"/><img src="media/search.png" width="300" hspace="20"/></p>
+<p align="center"><img src="media/ad.png" width="300" hspace="20" /><img src="media/profile.png" width="300" hspace="20"/></p>
