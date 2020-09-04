@@ -1,4 +1,4 @@
-# Omni.ads
+# Omni.ads  [![Build Status](https://travis-ci.org/lorczyslav/Omni.svg?branch=master)](https://travis-ci.org/lorczyslav/Omni)
 ## About
 
 Created web app allows for browsing, searching and creating adverts. Users are also presented with a dedicated messaging system, allowing for communication between parties. Application as a whole, was created using three-tier architecture which includes: user interface accessible via web browsers, REST API server and a database. Development included using technologies such as React and Django, along with Django REST Framework. In order to ensure proper operation, vast amount of unit tests was developed alongside the application.
