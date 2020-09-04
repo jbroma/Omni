@@ -1,0 +1,20 @@
+os: linux
+language: python
+python:
+  - "3.8"
+
+services:
+  - docker
+
+install: pip install docker-compose
+
+jobs:
+  include:
+    - stage: "Build"
+      script: "docker-compose build --no-cache"
+    - stage: "Tests"
+      name: "API Tests"
+      script: docker-compose run --rm app sh -c "python manage.py test --parallel"
+    - stage: "Lint"
+      name: "API Lint"
+      script: docker-compose run --rm app sh -c "flake8"
