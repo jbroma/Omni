@@ -169,8 +169,8 @@ class PrivateUserApiTests(TestCase):
             'location': None,
             'picture': None,
             'date_created': self.user.date_created
-                .astimezone(tz=TZone('Europe/London'))
-                .isoformat(),
+                        .astimezone(tz=TZone('Europe/London'))
+                        .isoformat(),
         })
 
     def test_post_profile_not_allowed(self):

@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from core.models import Advert, AdvertImageLink
+from core.models import Advert
 
 
 class IsAdvertOwnerOrReadOnly(permissions.BasePermission):

@@ -6,6 +6,7 @@ from core.models import Conversation, Message, Advert
 
 from user.serializers import PublicUserSerializer
 
+
 class MessageSerializer(serializers.ModelSerializer):
     """Serializer for retrieving messages"""
 
@@ -91,7 +92,7 @@ class ConversationsSerializer(serializers.ModelSerializer):
     """Serializer for listing all conversations"""
     user_1 = PublicUserSerializer()
     user_2 = PublicUserSerializer()
-    
+
     class Meta:
         model = Conversation
         fields = (
